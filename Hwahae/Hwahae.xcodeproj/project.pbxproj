@@ -8,13 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		DD6C808F23C2C29C004AD177 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6C808E23C2C29C004AD177 /* AppDelegate.swift */; };
-		DD6C809123C2C29C004AD177 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6C809023C2C29C004AD177 /* SceneDelegate.swift */; };
 		DD6C809323C2C29C004AD177 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6C809223C2C29C004AD177 /* ViewController.swift */; };
-		DD6C809623C2C29C004AD177 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD6C809423C2C29C004AD177 /* Main.storyboard */; };
 		DD6C809823C2C29D004AD177 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD6C809723C2C29D004AD177 /* Assets.xcassets */; };
 		DD6C809B23C2C29D004AD177 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD6C809923C2C29D004AD177 /* LaunchScreen.storyboard */; };
 		DD6C80A623C2C29E004AD177 /* HwahaeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6C80A523C2C29E004AD177 /* HwahaeTests.swift */; };
 		DD6C80B123C2C29E004AD177 /* HwahaeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6C80B023C2C29E004AD177 /* HwahaeUITests.swift */; };
+		DD6C80C723C2C840004AD177 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6C80C623C2C840004AD177 /* SceneDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,9 +36,7 @@
 /* Begin PBXFileReference section */
 		DD6C808B23C2C29C004AD177 /* Hwahae.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hwahae.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD6C808E23C2C29C004AD177 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		DD6C809023C2C29C004AD177 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		DD6C809223C2C29C004AD177 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		DD6C809523C2C29C004AD177 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DD6C809723C2C29D004AD177 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DD6C809A23C2C29D004AD177 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DD6C809C23C2C29D004AD177 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -49,6 +46,7 @@
 		DD6C80AC23C2C29E004AD177 /* HwahaeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HwahaeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD6C80B023C2C29E004AD177 /* HwahaeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HwahaeUITests.swift; sourceTree = "<group>"; };
 		DD6C80B223C2C29E004AD177 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DD6C80C623C2C840004AD177 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,13 +97,9 @@
 		DD6C808D23C2C29C004AD177 /* Hwahae */ = {
 			isa = PBXGroup;
 			children = (
-				DD6C808E23C2C29C004AD177 /* AppDelegate.swift */,
-				DD6C809023C2C29C004AD177 /* SceneDelegate.swift */,
-				DD6C809223C2C29C004AD177 /* ViewController.swift */,
-				DD6C809423C2C29C004AD177 /* Main.storyboard */,
-				DD6C809723C2C29D004AD177 /* Assets.xcassets */,
-				DD6C809923C2C29D004AD177 /* LaunchScreen.storyboard */,
-				DD6C809C23C2C29D004AD177 /* Info.plist */,
+				DD6C80C023C2C43E004AD177 /* Source */,
+				DD6C80BF23C2C413004AD177 /* Resource */,
+				DD6C80BE23C2C3F0004AD177 /* Support */,
 			);
 			path = Hwahae;
 			sourceTree = "<group>";
@@ -126,6 +120,41 @@
 				DD6C80B223C2C29E004AD177 /* Info.plist */,
 			);
 			path = HwahaeUITests;
+			sourceTree = "<group>";
+		};
+		DD6C80BE23C2C3F0004AD177 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				DD6C809C23C2C29D004AD177 /* Info.plist */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		DD6C80BF23C2C413004AD177 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				DD6C809723C2C29D004AD177 /* Assets.xcassets */,
+				DD6C809923C2C29D004AD177 /* LaunchScreen.storyboard */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		DD6C80C023C2C43E004AD177 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				DD6C80C523C2C738004AD177 /* Views */,
+				DD6C808E23C2C29C004AD177 /* AppDelegate.swift */,
+				DD6C80C623C2C840004AD177 /* SceneDelegate.swift */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		DD6C80C523C2C738004AD177 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				DD6C809223C2C29C004AD177 /* ViewController.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -234,7 +263,6 @@
 			files = (
 				DD6C809B23C2C29D004AD177 /* LaunchScreen.storyboard in Resources */,
 				DD6C809823C2C29D004AD177 /* Assets.xcassets in Resources */,
-				DD6C809623C2C29C004AD177 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,7 +289,7 @@
 			files = (
 				DD6C809323C2C29C004AD177 /* ViewController.swift in Sources */,
 				DD6C808F23C2C29C004AD177 /* AppDelegate.swift in Sources */,
-				DD6C809123C2C29C004AD177 /* SceneDelegate.swift in Sources */,
+				DD6C80C723C2C840004AD177 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,14 +325,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		DD6C809423C2C29C004AD177 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				DD6C809523C2C29C004AD177 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		DD6C809923C2C29D004AD177 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -436,7 +456,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6U8M4ASV96;
-				INFOPLIST_FILE = Hwahae/Info.plist;
+				INFOPLIST_FILE = Hwahae/Support/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -444,7 +465,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.hyopangworld.Hwahae;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -454,7 +475,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6U8M4ASV96;
-				INFOPLIST_FILE = Hwahae/Info.plist;
+				INFOPLIST_FILE = Hwahae/Support/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -462,7 +484,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.hyopangworld.Hwahae;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

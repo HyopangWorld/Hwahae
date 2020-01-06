@@ -1,0 +1,9 @@
+# Pods 
+Podfile.lock
+Market.xcworkspace	
+Market/Pods/			
+
+# xcodeproj
+*.xcuserstate
+xcschememanagement.plist
+contents.xcworkspacedata
