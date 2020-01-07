@@ -1,0 +1,31 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'Hwahae' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for Hwahae
+  # RxSwift + Dependencies
+  pod 'RxSwift', '~> 5.0.1'
+  pod 'RxCocoa', '~> 5.0.1'
+  pod 'RxOptional', '~> 4.1.0'
+  pod 'RxAppState'
+  pod 'RxDataSources'  
+
+  # UI (Autolayout, Image, Animation, Label)
+  pod 'SnapKit', '~> 5.0.1'
+
+  # Other Swift Utilites
+  pod 'Then', '~> 2.6.0'
+
+  target 'HwahaeTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target 'HwahaeUITests' do
+    # Pods for testing
+  end
+
+end
