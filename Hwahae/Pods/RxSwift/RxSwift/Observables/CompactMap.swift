@@ -30,7 +30,7 @@ extension ObservableType {
 final private class CompactMapSink<SourceType, Observer: ObserverType>: Sink<Observer>, ObserverType {
     typealias Transform = (SourceType) throws -> ResultType?
 
-    typealias ResultType = Observer.Element 
+    typealias ResultType = Observer.Element
     typealias Element = SourceType
 
     private let _transform: Transform
@@ -47,8 +47,7 @@ final private class CompactMapSink<SourceType, Observer: ObserverType>: Sink<Obs
                 if let mappedElement = try self._transform(element) {
                     self.forwardOn(.next(mappedElement))
                 }
-            }
-            catch let e {
+            } catch let e {
                 self.forwardOn(.error(e))
                 self.dispose()
             }

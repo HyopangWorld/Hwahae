@@ -241,7 +241,7 @@ extension ObservableType {
 }
 
 extension ObservableType {
-    
+
     /**
      Applies a timeout policy for each element in the observable sequence. If the next element isn't received within the specified timeout duration starting from its predecessor, a TimeoutError is propagated to the observer.
      
@@ -256,7 +256,7 @@ extension ObservableType {
         -> Observable<Element> {
         return timeout(.milliseconds(Int(dueTime * 1000.0)), scheduler: scheduler)
     }
-    
+
     /**
      Applies a timeout policy for each element in the observable sequence, using the specified scheduler to run timeout timers. If the next element isn't received within the specified timeout duration starting from its predecessor, the other observable sequence is used to produce future messages from that point on.
      
@@ -275,7 +275,7 @@ extension ObservableType {
 }
 
 extension ObservableType {
-    
+
     /**
      Skips elements for the specified duration from the start of the observable source sequence, using the specified scheduler to run timers.
      
@@ -292,7 +292,7 @@ extension ObservableType {
     }
 }
 
-extension ObservableType where Element : RxAbstractInteger {
+extension ObservableType where Element: RxAbstractInteger {
     /**
      Returns an observable sequence that produces a value after each period, using the specified scheduler to run timers and to send out observer messages.
      
@@ -328,7 +328,7 @@ extension ObservableType where Element: RxAbstractInteger {
 }
 
 extension ObservableType {
-    
+
     /**
      Returns an Observable that emits the first and the latest item emitted by the source Observable during sequential time windows of a specified duration.
      
@@ -349,7 +349,7 @@ extension ObservableType {
 }
 
 extension ObservableType {
-    
+
     /**
      Takes elements for the specified duration from the start of the observable source sequence, using the specified scheduler to run timers.
      
@@ -368,7 +368,7 @@ extension ObservableType {
 
 
 extension ObservableType {
-    
+
     /**
      Time shifts the observable sequence by delaying the subscription with the specified relative time duration, using the specified scheduler to run timers.
      
@@ -386,7 +386,7 @@ extension ObservableType {
 }
 
 extension ObservableType {
-    
+
     /**
      Projects each element of an observable sequence into a window that is completed when either it’s full or a given amount of time has elapsed.
      
@@ -420,7 +420,7 @@ extension PrimitiveSequence {
         -> PrimitiveSequence<Trait, Element> {
         return delay(.milliseconds(Int(dueTime * 1000.0)), scheduler: scheduler)
     }
-            
+
     /**
      Time shifts the observable sequence by delaying the subscription with the specified relative time duration, using the specified scheduler to run timers.
      
@@ -435,7 +435,7 @@ extension PrimitiveSequence {
         -> PrimitiveSequence<Trait, Element> {
         return delaySubscription(.milliseconds(Int(dueTime * 1000.0)), scheduler: scheduler)
     }
-    
+
     /**
      Applies a timeout policy for each element in the observable sequence. If the next element isn't received within the specified timeout duration starting from its predecessor, a TimeoutError is propagated to the observer.
      
@@ -450,7 +450,7 @@ extension PrimitiveSequence {
         -> PrimitiveSequence<Trait, Element> {
         return timeout(.milliseconds(Int(dueTime * 1000.0)), scheduler: scheduler)
     }
-    
+
     /**
      Applies a timeout policy for each element in the observable sequence, using the specified scheduler to run timeout timers. If the next element isn't received within the specified timeout duration starting from its predecessor, the other observable sequence is used to produce future messages from that point on.
      
@@ -520,8 +520,7 @@ extension ObservableType {
     }
 }
 
-extension PrimitiveSequenceType where Element: RxAbstractInteger
-{
+extension PrimitiveSequenceType where Element: RxAbstractInteger {
     /**
      Returns an observable sequence that periodically produces a value after the specified initial relative due time has elapsed, using the specified scheduler to run timers.
      
@@ -533,7 +532,7 @@ extension PrimitiveSequenceType where Element: RxAbstractInteger
      */
     @available(*, deprecated, message: "Use DispatchTimeInterval overload instead.", renamed: "timer(_:scheduler:)")
     public static func timer(_ dueTime: Foundation.TimeInterval, scheduler: SchedulerType)
-        -> PrimitiveSequence<Trait, Element>  {
+        -> PrimitiveSequence<Trait, Element> {
         return timer(.milliseconds(Int(dueTime * 1000.0)), scheduler: scheduler)
     }
 }

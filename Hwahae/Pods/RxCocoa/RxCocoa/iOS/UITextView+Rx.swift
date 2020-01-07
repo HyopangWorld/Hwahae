@@ -16,12 +16,12 @@ extension Reactive where Base: UITextView {
     public var text: ControlProperty<String?> {
         return value
     }
-    
+
     /// Reactive wrapper for `text` property.
     public var value: ControlProperty<String?> {
         let source: Observable<String?> = Observable.deferred { [weak textView = self.base] in
             let text = textView?.text
-            
+
             let textChanged = textView?.textStorage
                 // This project uses text storage notifications because
                 // that's the only way to catch autocorrect changes
@@ -35,7 +35,7 @@ extension Reactive where Base: UITextView {
                     return textView?.textStorage.string
                 }
                 ?? Observable.empty()
-            
+
             return textChanged
                 .startWith(text)
         }
@@ -48,16 +48,15 @@ extension Reactive where Base: UITextView {
                 textView.text = text
             }
         }
-        
+
         return ControlProperty(values: source, valueSink: bindingObserver)
     }
-    
-    
+
     /// Reactive wrapper for `attributedText` property.
     public var attributedText: ControlProperty<NSAttributedString?> {
         let source: Observable<NSAttributedString?> = Observable.deferred { [weak textView = self.base] in
             let attributedText = textView?.attributedText
-            
+
             let textChanged: Observable<NSAttributedString?> = textView?.textStorage
                 // This project uses text storage notifications because
                 // that's the only way to catch autocorrect changes
@@ -71,11 +70,11 @@ extension Reactive where Base: UITextView {
                     return textView?.attributedText
                 }
                 ?? Observable.empty()
-            
+
             return textChanged
                 .startWith(attributedText)
         }
-        
+
         let bindingObserver = Binder(self.base) { (textView, attributedText: NSAttributedString?) in
             // This check is important because setting text value always clears control state
             // including marked text selection which is imporant for proper input
@@ -84,7 +83,7 @@ extension Reactive where Base: UITextView {
                 textView.attributedText = attributedText
             }
         }
-        
+
         return ControlProperty(values: source, valueSink: bindingObserver)
     }
 

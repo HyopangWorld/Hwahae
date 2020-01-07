@@ -156,9 +156,7 @@ extension ObservableType {
     }
 }
 
-fileprivate final class ShareReplay1WhileConnectedConnection<Element>
-    : ObserverType
-    , SynchronizedUnsubscribeType {
+fileprivate final class ShareReplay1WhileConnectedConnection<Element>: ObserverType, SynchronizedUnsubscribeType {
     typealias Observers = AnyObserver<Element>.s
     typealias DisposeKey = Observers.KeyType
 
@@ -258,8 +256,7 @@ fileprivate final class ShareReplay1WhileConnectedConnection<Element>
 }
 
 // optimized version of share replay for most common case
-final private class ShareReplay1WhileConnected<Element>
-    : Observable<Element> {
+final private class ShareReplay1WhileConnected<Element>: Observable<Element> {
 
     fileprivate typealias Connection = ShareReplay1WhileConnectedConnection<Element>
 
@@ -282,7 +279,7 @@ final private class ShareReplay1WhileConnected<Element>
         let disposable = connection._synchronized_subscribe(observer)
 
         self._lock.unlock()
-        
+
         if count == 0 {
             connection.connect()
         }
@@ -296,8 +293,7 @@ final private class ShareReplay1WhileConnected<Element>
 
         if let existingConnection = self._connection {
             connection = existingConnection
-        }
-        else {
+        } else {
             connection = ShareReplay1WhileConnectedConnection<Element>(
                 parent: self,
                 lock: self._lock)
@@ -308,9 +304,7 @@ final private class ShareReplay1WhileConnected<Element>
     }
 }
 
-fileprivate final class ShareWhileConnectedConnection<Element>
-    : ObserverType
-    , SynchronizedUnsubscribeType {
+fileprivate final class ShareWhileConnectedConnection<Element>: ObserverType, SynchronizedUnsubscribeType {
     typealias Observers = AnyObserver<Element>.s
     typealias DisposeKey = Observers.KeyType
 
@@ -405,8 +399,7 @@ fileprivate final class ShareWhileConnectedConnection<Element>
 }
 
 // optimized version of share replay for most common case
-final private class ShareWhileConnected<Element>
-    : Observable<Element> {
+final private class ShareWhileConnected<Element>: Observable<Element> {
 
     fileprivate typealias Connection = ShareWhileConnectedConnection<Element>
 
@@ -443,14 +436,13 @@ final private class ShareWhileConnected<Element>
 
         if let existingConnection = self._connection {
             connection = existingConnection
-        }
-        else {
+        } else {
             connection = ShareWhileConnectedConnection<Element>(
                 parent: self,
                 lock: self._lock)
             self._connection = connection
         }
-        
+
         return connection
     }
 }

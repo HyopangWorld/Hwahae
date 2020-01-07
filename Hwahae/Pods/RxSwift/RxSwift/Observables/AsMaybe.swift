@@ -6,7 +6,7 @@
 //  Copyright © 2017 Krunoslav Zaher. All rights reserved.
 //
 
-fileprivate final class AsMaybeSink<Observer: ObserverType> : Sink<Observer>, ObserverType {
+fileprivate final class AsMaybeSink<Observer: ObserverType>: Sink<Observer>, ObserverType {
     typealias Element = Observer.Element
 
     private var _element: Event<Element>?

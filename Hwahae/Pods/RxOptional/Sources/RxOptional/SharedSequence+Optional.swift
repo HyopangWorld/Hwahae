@@ -6,7 +6,7 @@ public extension SharedSequenceConvertibleType where Element: OptionalType {
 
      - returns: `Driver` of source `Driver`'s elements, with `nil` elements filtered out.
      */
-    
+
     func filterNil() -> SharedSequence<SharingStrategy, Element.Wrapped> {
         return flatMap { element -> SharedSequence<SharingStrategy, Element.Wrapped> in
             guard let value = element.value else {
@@ -23,7 +23,7 @@ public extension SharedSequenceConvertibleType where Element: OptionalType {
 
      - returns: `Driver` of the source `Driver`'s unwrapped elements, with `nil` elements replaced by `valueOnNil`.
      */
-    
+
     func replaceNilWith(_ valueOnNil: Element.Wrapped) -> SharedSequence<SharingStrategy, Element.Wrapped> {
         return map { element -> Element.Wrapped in
             guard let value = element.value else {
@@ -40,7 +40,7 @@ public extension SharedSequenceConvertibleType where Element: OptionalType {
 
      - returns: `Driver` of the source `Driver`'s unwrapped elements, with `nil` elements replaced by the handler's returned non-`nil` elements.
      */
-    
+
     func catchOnNil(_ handler: @escaping () -> SharedSequence<SharingStrategy, Element.Wrapped>) -> SharedSequence<SharingStrategy, Element.Wrapped> {
         return flatMap { element -> SharedSequence<SharingStrategy, Element.Wrapped> in
             guard let value = element.value else {
@@ -60,7 +60,7 @@ public extension SharedSequenceConvertibleType where Element: OptionalType, Elem
      
      - returns: An observable sequence only containing the distinct contiguous elements, based on equality operator, from the source sequence.
      */
-    
+
     func distinctUntilChanged() -> SharedSequence<SharingStrategy, Element> {
         return self.distinctUntilChanged { (lhs, rhs) -> Bool in
             return lhs.value == rhs.value

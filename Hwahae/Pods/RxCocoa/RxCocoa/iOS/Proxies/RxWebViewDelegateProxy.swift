@@ -15,10 +15,7 @@ extension UIWebView: HasDelegate {
     public typealias Delegate = UIWebViewDelegate
 }
 
-open class RxWebViewDelegateProxy
-    : DelegateProxy<UIWebView, UIWebViewDelegate>
-    , DelegateProxyType 
-    , UIWebViewDelegate {
+open class RxWebViewDelegateProxy: DelegateProxy<UIWebView, UIWebViewDelegate>, DelegateProxyType, UIWebViewDelegate {
 
     /// Typed parent object.
     public weak private(set) var webView: UIWebView?

@@ -14,10 +14,7 @@ import RxCocoa
 #endif
 import Differentiator
 
-open class TableViewSectionedDataSource<Section: SectionModelType>
-    : NSObject
-    , UITableViewDataSource
-    , SectionedViewDataSourceType {
+open class TableViewSectionedDataSource<Section: SectionModelType>: NSObject, UITableViewDataSource, SectionedViewDataSourceType {
     
     public typealias Item = Section.Item
 

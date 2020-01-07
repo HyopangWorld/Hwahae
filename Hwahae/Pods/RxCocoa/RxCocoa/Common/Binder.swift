@@ -19,7 +19,7 @@ import RxSwift
  */
 public struct Binder<Value>: ObserverType {
     public typealias Element = Value
-    
+
     private let _binding: (Event<Value>) -> Void
 
     /// Initializes `Binder`

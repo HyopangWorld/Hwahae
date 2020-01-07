@@ -13,7 +13,7 @@
 
     extension Reactive where Base: NSView {
         /// Bindable sink for `hidden` property.
-        public var isHidden:  Binder<Bool> {
+        public var isHidden: Binder<Bool> {
             return Binder(self.base) { view, value in
                 view.isHidden = value
             }

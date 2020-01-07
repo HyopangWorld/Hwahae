@@ -35,7 +35,7 @@ public protocol ObservableType: ObservableConvertibleType {
 }
 
 extension ObservableType {
-    
+
     /// Default implementation of converting `ObservableType` to `Observable`.
     public func asObservable() -> Observable<Element> {
         // temporary workaround

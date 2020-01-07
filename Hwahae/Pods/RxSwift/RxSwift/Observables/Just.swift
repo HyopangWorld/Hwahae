@@ -74,11 +74,11 @@ final private class JustScheduled<Element>: Producer<Element> {
 
 final private class Just<Element>: Producer<Element> {
     private let _element: Element
-    
+
     init(element: Element) {
         self._element = element
     }
-    
+
     override func subscribe<Observer: ObserverType>(_ observer: Observer) -> Disposable where Observer.Element == Element {
         observer.on(.next(self._element))
         observer.on(.completed)

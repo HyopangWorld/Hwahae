@@ -76,15 +76,13 @@ final private class ConcatCompletable<Element>: Producer<Element> {
     }
 }
 
-final private class ConcatCompletableSink<Observer: ObserverType>
-    : Sink<Observer>
-    , ObserverType {
+final private class ConcatCompletableSink<Observer: ObserverType>: Sink<Observer>, ObserverType {
     typealias Element = Never
     typealias Parent = ConcatCompletable<Observer.Element>
 
     private let _parent: Parent
     private let _subscription = SerialDisposable()
-    
+
     init(parent: Parent, observer: Observer, cancel: Cancelable) {
         self._parent = parent
         super.init(observer: observer, cancel: cancel)
@@ -111,12 +109,11 @@ final private class ConcatCompletableSink<Observer: ObserverType>
     }
 }
 
-final private class ConcatCompletableSinkOther<Observer: ObserverType>
-    : ObserverType {
-    typealias Element = Observer.Element 
+final private class ConcatCompletableSinkOther<Observer: ObserverType>: ObserverType {
+    typealias Element = Observer.Element
 
     typealias Parent = ConcatCompletableSink<Observer>
-    
+
     private let _parent: Parent
 
     init(parent: Parent) {

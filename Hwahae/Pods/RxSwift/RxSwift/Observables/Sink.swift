@@ -6,7 +6,7 @@
 //  Copyright © 2015 Krunoslav Zaher. All rights reserved.
 //
 
-class Sink<Observer: ObserverType> : Disposable {
+class Sink<Observer: ObserverType>: Disposable {
     fileprivate let _observer: Observer
     fileprivate let _cancel: Cancelable
     fileprivate let _disposed = AtomicInt(0)
@@ -55,7 +55,7 @@ class Sink<Observer: ObserverType> : Disposable {
 }
 
 final class SinkForward<Observer: ObserverType>: ObserverType {
-    typealias Element = Observer.Element 
+    typealias Element = Observer.Element
 
     private let _forward: Sink<Observer>
 

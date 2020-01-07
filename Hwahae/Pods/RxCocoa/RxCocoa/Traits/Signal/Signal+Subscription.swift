@@ -44,7 +44,7 @@ extension SharedSequenceConvertibleType where SharingStrategy == SignalSharingSt
             relay.accept(e)
         })
     }
-    
+
     /**
      Creates new subscription and sends elements to `BehaviorRelay`.
      - parameter relay: Target relay for sequence elements.
@@ -55,7 +55,7 @@ extension SharedSequenceConvertibleType where SharingStrategy == SignalSharingSt
             relay.accept(e)
         })
     }
-    
+
     /**
      Creates new subscription and sends elements to relay.
 
@@ -96,6 +96,3 @@ extension SharedSequenceConvertibleType where SharingStrategy == SignalSharingSt
         return self.asObservable().subscribe(onNext: onNext, onCompleted: onCompleted, onDisposed: onDisposed)
     }
 }
-
-
-

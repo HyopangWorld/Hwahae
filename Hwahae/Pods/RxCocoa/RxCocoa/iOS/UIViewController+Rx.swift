@@ -19,6 +19,6 @@
                 viewController.title = title
             }
         }
-    
+
     }
 #endif

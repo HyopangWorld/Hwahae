@@ -70,7 +70,6 @@ extension ObservableType {
          return binder(self)(curriedArgument)
     }
 
-
     /**
     Subscribes an element handler to an observable sequence.
     In case error occurs in debug mode, `fatalError` will be raised.

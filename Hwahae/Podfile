@@ -11,13 +11,14 @@ target 'Hwahae' do
   pod 'RxCocoa', '~> 5.0.1'
   pod 'RxOptional', '~> 4.1.0'
   pod 'RxAppState'
-  pod 'RxDataSources'  
+  pod 'RxDataSources'
 
   # UI (Autolayout, Image, Animation, Label)
   pod 'SnapKit', '~> 5.0.1'
 
   # Other Swift Utilites
   pod 'Then', '~> 2.6.0'
+  pod 'SwiftLint'
 
   target 'HwahaeTests' do
     inherit! :search_paths

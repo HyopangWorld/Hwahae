@@ -16,24 +16,24 @@ import RxSwift
 
 class ViewController<ViewBindable>: UIViewController {
     var disposeBag = DisposeBag()
-    
+
     init() {
         super.init(nibName: nil, bundle: nil)
-        
+
         initialize()
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         attribute()
         layout()
     }
-    
+
     /*
      `ViewBindable`과 각 컴포넌트들의 속성을 binding
      
@@ -44,7 +44,7 @@ class ViewController<ViewBindable>: UIViewController {
      - viewModel: view에 bind 할 수 있는 `ViewBindable`, protocol로 작성해야함.
      */
     func bind(_ viewModel: ViewBindable) {}
-    
+
     /*
      `UIViewController`의 다양한 레이아웃 속성을 정의
      
@@ -52,7 +52,7 @@ class ViewController<ViewBindable>: UIViewController {
      - 컴포넌트들의 위치를 정의하고 부모View에 Add하는 동작을 수행
      */
     func layout() {}
-    
+
     /*
      `UIViewController`의 다양한 프로퍼티의 속성을 정의
      
@@ -60,7 +60,7 @@ class ViewController<ViewBindable>: UIViewController {
      - `Then`의 `do`라는 함수를 통해 각 컴포넌트들의 속성을 그룹핑
      */
     func attribute() {}
-    
+
     /*
      `init()` 시점에 주입되어야 할 Cocoa 종속성 properties에 대한 변경이 필요할 때 사용함.
      주의: init 시점이 아닌 properties를 변경할 경우 viewDidLoad() 시점에 영향을 줄 수 있음

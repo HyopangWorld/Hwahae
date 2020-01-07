@@ -19,7 +19,7 @@ extension Reactive where Base: UIAlertAction {
             alertAction.isEnabled = value
         }
     }
-    
+
 }
-    
+
 #endif

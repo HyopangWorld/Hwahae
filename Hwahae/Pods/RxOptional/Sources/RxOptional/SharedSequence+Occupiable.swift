@@ -7,7 +7,7 @@ public extension SharedSequenceConvertibleType where Element: Occupiable {
 
      - returns: `Driver` of source `Driver`'s elements, with empty elements filtered out.
      */
-    
+
     func filterEmpty() -> SharedSequence<SharingStrategy, Element> {
         return flatMap { element -> SharedSequence<SharingStrategy, Element> in
             guard element.isNotEmpty else {
@@ -24,7 +24,7 @@ public extension SharedSequenceConvertibleType where Element: Occupiable {
 
      - returns: `Driver` of the source `Driver`'s elements, with empty elements replaced by the handler's returned non-empty elements.
      */
-    
+
     func catchOnEmpty(_ handler: @escaping () -> SharedSequence<SharingStrategy, Element>) -> SharedSequence<SharingStrategy, Element> {
         return flatMap { element -> SharedSequence<SharingStrategy, Element> in
             guard element.isNotEmpty else {

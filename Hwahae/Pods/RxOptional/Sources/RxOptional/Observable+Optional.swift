@@ -10,7 +10,7 @@ public extension ObservableType where Element: OptionalType {
 
      - returns: `Observable` of source `Observable`'s elements, with `nil` elements filtered out.
      */
-    
+
     func filterNil() -> Observable<Element.Wrapped> {
         return self.flatMap { element -> Observable<Element.Wrapped> in
             guard let value = element.value else {
@@ -43,7 +43,7 @@ public extension ObservableType where Element: OptionalType {
 
      - returns: original source `Observable` of non-empty elements if it contains no empty elements.
      */
-    
+
     func errorOnNil(_ error: Error = RxOptionalError.foundNilWhileUnwrappingOptional(Element.self)) -> Observable<Element.Wrapped> {
         return self.map { element -> Element.Wrapped in
             guard let value = element.value else {
@@ -60,7 +60,7 @@ public extension ObservableType where Element: OptionalType {
 
      - returns: `Observable` of the source `Observable`'s unwrapped elements, with `nil` elements replaced by `valueOnNil`.
      */
-    
+
     func replaceNilWith(_ valueOnNil: Element.Wrapped) -> Observable<Element.Wrapped> {
         return self.map { element -> Element.Wrapped in
             guard let value = element.value else {
@@ -77,7 +77,7 @@ public extension ObservableType where Element: OptionalType {
 
      - returns: `Observable` of the source `Observable`'s unwrapped elements, with `nil` elements replaced by the handler's returned non-`nil` elements.
      */
-    
+
     func catchOnNil(_ handler: @escaping () throws -> Observable<Element.Wrapped>) -> Observable<Element.Wrapped> {
         return self.flatMap { element -> Observable<Element.Wrapped> in
             guard let value = element.value else {
@@ -97,7 +97,7 @@ public extension ObservableType where Element: OptionalType, Element.Wrapped: Eq
      
      - returns: An observable sequence only containing the distinct contiguous elements, based on equality operator, from the source sequence.
      */
-    
+
     func distinctUntilChanged() -> Observable<Self.E> {
         return self.distinctUntilChanged { (lhs, rhs) -> Bool in
             return lhs.value == rhs.value

@@ -21,7 +21,7 @@ extension DispatchTimeInterval {
         @unknown default: fatalError()
         }
     }
- 
+
     func map(_ transform: (Int, Double) -> Int) -> DispatchTimeInterval {
         switch self {
         case .nanoseconds(let value): return .nanoseconds(transform(value, 1_000_000_000.0))
@@ -32,7 +32,7 @@ extension DispatchTimeInterval {
         @unknown default: fatalError()
         }
     }
-    
+
     var isNow: Bool {
         switch self {
         case .nanoseconds(let value), .microseconds(let value), .milliseconds(let value), .seconds(let value): return value == 0
@@ -40,7 +40,7 @@ extension DispatchTimeInterval {
         @unknown default: fatalError()
         }
     }
-    
+
     internal func reduceWithSpanBetween(earlierDate: Date, laterDate: Date) -> DispatchTimeInterval {
         return self.map { value, factor in
             let interval = laterDate.timeIntervalSince(earlierDate)
@@ -61,5 +61,5 @@ extension Date {
         @unknown default: fatalError()
         }
     }
-    
+
 }

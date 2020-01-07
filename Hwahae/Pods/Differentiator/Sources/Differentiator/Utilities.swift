@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum DifferentiatorError : Error {
+enum DifferentiatorError: Error {
     case unwrappingOptional
     case preconditionFailed(message: String)
 }

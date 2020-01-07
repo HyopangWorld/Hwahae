@@ -22,7 +22,7 @@ extension ObservableConvertibleType {
             .catchErrorJustReturn(onErrorJustReturn)
         return Driver(source)
     }
-    
+
     /**
     Converts observable sequence to `Driver` trait.
     

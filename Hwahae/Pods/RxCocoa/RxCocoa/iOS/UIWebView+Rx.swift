@@ -32,7 +32,7 @@
                 .methodInvoked(#selector(UIWebViewDelegate.webViewDidFinishLoad(_:)))
                 .map { _ in }
         }
-        
+
         /// Reactive wrapper for `delegate` message.
         public var didFailLoad: Observable<Error> {
             return delegate

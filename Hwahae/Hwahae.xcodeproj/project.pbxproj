@@ -16,6 +16,7 @@
 		DD6C80A623C2C29E004AD177 /* HwahaeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6C80A523C2C29E004AD177 /* HwahaeTests.swift */; };
 		DD6C80B123C2C29E004AD177 /* HwahaeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6C80B023C2C29E004AD177 /* HwahaeUITests.swift */; };
 		DD6C80C723C2C840004AD177 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6C80C623C2C840004AD177 /* SceneDelegate.swift */; };
+		DDFC2E0C23C4443200A89BA4 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = DDFC2E0B23C4443200A89BA4 /* .swiftlint.yml */; };
 		E2C0731C36326ABEA8C1139F /* Pods_HwahaeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24ED715304F67EE5897ABB37 /* Pods_HwahaeTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +59,7 @@
 		DD6C80B023C2C29E004AD177 /* HwahaeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HwahaeUITests.swift; sourceTree = "<group>"; };
 		DD6C80B223C2C29E004AD177 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DD6C80C623C2C840004AD177 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		DDFC2E0B23C4443200A89BA4 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		FF2B567F7ACD07A528F03963 /* Pods-HwahaeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HwahaeTests.debug.xcconfig"; path = "Target Support Files/Pods-HwahaeTests/Pods-HwahaeTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -115,6 +117,7 @@
 		DD6C808223C2C29C004AD177 = {
 			isa = PBXGroup;
 			children = (
+				DDFC2E0B23C4443200A89BA4 /* .swiftlint.yml */,
 				DD6C808D23C2C29C004AD177 /* Hwahae */,
 				DD6C80A423C2C29E004AD177 /* HwahaeTests */,
 				DD6C80AF23C2C29E004AD177 /* HwahaeUITests */,
@@ -249,6 +252,7 @@
 				DD6C808823C2C29C004AD177 /* Frameworks */,
 				DD6C808923C2C29C004AD177 /* Resources */,
 				5E01DDAB17604FB1FD0C73AB /* [CP] Embed Pods Frameworks */,
+				DDFC2E0A23C4435900A89BA4 /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -346,6 +350,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DDFC2E0C23C4443200A89BA4 /* .swiftlint.yml in Resources */,
 				DD6C809B23C2C29D004AD177 /* LaunchScreen.storyboard in Resources */,
 				DD6C809823C2C29D004AD177 /* Assets.xcassets in Resources */,
 			);
@@ -467,6 +472,24 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Hwahae-HwahaeUITests/Pods-Hwahae-HwahaeUITests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		DDFC2E0A23C4435900A89BA4 /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${PODS_ROOT}/SwiftLint/swiftlint\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
