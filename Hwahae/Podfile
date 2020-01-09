@@ -15,7 +15,8 @@ target 'Hwahae' do
 
   # UI (Autolayout, Image, Animation, Label)
   pod 'SnapKit', '~> 5.0.1'
-  
+  pod 'Kingfisher', '~> 5.11.0'
+  pod 'KRWordWrapLabel', '~> 2.1.1'
 
   # Other Swift Utilites
   pod 'Then', '~> 2.6.0'
