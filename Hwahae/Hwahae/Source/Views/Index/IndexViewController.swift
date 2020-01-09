@@ -17,7 +17,7 @@ protocol IndexViewBindable { }
 class IndexViewController: ViewController<IndexViewBindable> {
     let searchController = UISearchController(searchResultsController: nil)
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    let indicator = UIImageView()
+    let indicator = Indicator(image: UIImage(named: "outline_explore_black.png"))
 
     private typealias UI = Constants.UI.Index
     private typealias TEXT = Constants.Text.Index
@@ -66,6 +66,11 @@ class IndexViewController: ViewController<IndexViewBindable> {
             $0.register(ProductListCell.self, forCellWithReuseIdentifier: String(describing: ProductListCell.self))
             $0.setCollectionViewLayout(layout, animated: true)
             $0.showsVerticalScrollIndicator = false
+        }
+
+        indicator.do {
+            $0.animation = Animations.spin
+            $0.tintColor = UIColor(red: (171/255), green: (171/255), blue: (196/255), alpha: 1)
         }
     }
 
