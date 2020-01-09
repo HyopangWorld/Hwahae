@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		7637693F6E8BA93ED2B8FFD0 /* Pods_Hwahae_HwahaeUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E1D2E82510C89AD256E2452 /* Pods_Hwahae_HwahaeUITests.framework */; };
 		BC0EB5FF6AA4B8A410ADB17B /* Pods_Hwahae.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2222DB74DD27B92B59FCFBB8 /* Pods_Hwahae.framework */; };
+		DD087CBF23C6FFA900B8CEB8 /* UIApplication+Statusbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD087CBE23C6FFA900B8CEB8 /* UIApplication+Statusbar.swift */; };
 		DD6C808F23C2C29C004AD177 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6C808E23C2C29C004AD177 /* AppDelegate.swift */; };
 		DD6C809323C2C29C004AD177 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6C809223C2C29C004AD177 /* ViewController.swift */; };
 		DD6C809823C2C29D004AD177 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD6C809723C2C29D004AD177 /* Assets.xcassets */; };
@@ -16,6 +17,10 @@
 		DD6C80A623C2C29E004AD177 /* HwahaeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6C80A523C2C29E004AD177 /* HwahaeTests.swift */; };
 		DD6C80B123C2C29E004AD177 /* HwahaeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6C80B023C2C29E004AD177 /* HwahaeUITests.swift */; };
 		DD6C80C723C2C840004AD177 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6C80C623C2C840004AD177 /* SceneDelegate.swift */; };
+		DDF703AC23C6AA6500838D9A /* IndexViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF703AB23C6AA6500838D9A /* IndexViewController.swift */; };
+		DDF703AE23C6AA6F00838D9A /* IndexViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF703AD23C6AA6F00838D9A /* IndexViewModel.swift */; };
+		DDF703B023C6AA7700838D9A /* IndexModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF703AF23C6AA7700838D9A /* IndexModel.swift */; };
+		DDF703B423C6AE0500838D9A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF703B323C6AE0500838D9A /* Constants.swift */; };
 		DDFC2E0C23C4443200A89BA4 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = DDFC2E0B23C4443200A89BA4 /* .swiftlint.yml */; };
 		E2C0731C36326ABEA8C1139F /* Pods_HwahaeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24ED715304F67EE5897ABB37 /* Pods_HwahaeTests.framework */; };
 /* End PBXBuildFile section */
@@ -46,6 +51,7 @@
 		87ACDFC61AB6C4517371DD0D /* Pods-Hwahae-HwahaeUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hwahae-HwahaeUITests.debug.xcconfig"; path = "Target Support Files/Pods-Hwahae-HwahaeUITests/Pods-Hwahae-HwahaeUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		91421D968DC1924CE69C3386 /* Pods-Hwahae.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hwahae.release.xcconfig"; path = "Target Support Files/Pods-Hwahae/Pods-Hwahae.release.xcconfig"; sourceTree = "<group>"; };
 		C95DAF8A62EEDE952F45B959 /* Pods-HwahaeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HwahaeTests.release.xcconfig"; path = "Target Support Files/Pods-HwahaeTests/Pods-HwahaeTests.release.xcconfig"; sourceTree = "<group>"; };
+		DD087CBE23C6FFA900B8CEB8 /* UIApplication+Statusbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Statusbar.swift"; sourceTree = "<group>"; };
 		DD6C808B23C2C29C004AD177 /* Hwahae.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hwahae.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD6C808E23C2C29C004AD177 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DD6C809223C2C29C004AD177 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -59,6 +65,10 @@
 		DD6C80B023C2C29E004AD177 /* HwahaeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HwahaeUITests.swift; sourceTree = "<group>"; };
 		DD6C80B223C2C29E004AD177 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DD6C80C623C2C840004AD177 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		DDF703AB23C6AA6500838D9A /* IndexViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexViewController.swift; sourceTree = "<group>"; };
+		DDF703AD23C6AA6F00838D9A /* IndexViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexViewModel.swift; sourceTree = "<group>"; };
+		DDF703AF23C6AA7700838D9A /* IndexModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexModel.swift; sourceTree = "<group>"; };
+		DDF703B323C6AE0500838D9A /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		DDFC2E0B23C4443200A89BA4 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		FF2B567F7ACD07A528F03963 /* Pods-HwahaeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HwahaeTests.debug.xcconfig"; path = "Target Support Files/Pods-HwahaeTests/Pods-HwahaeTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -112,6 +122,14 @@
 				C95DAF8A62EEDE952F45B959 /* Pods-HwahaeTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		DD087CBD23C6FF8600B8CEB8 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				DD087CBE23C6FFA900B8CEB8 /* UIApplication+Statusbar.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 		DD6C808223C2C29C004AD177 = {
@@ -185,10 +203,8 @@
 		DD6C80C023C2C43E004AD177 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				DD087CBD23C6FF8600B8CEB8 /* Extension */,
 				DD6C80C523C2C738004AD177 /* Views */,
-				DDB0DC2623C440EC0087D048 /* Models */,
-				DDB0DC2923C441060087D048 /* Extension */,
-				DDB0DC2723C440F30087D048 /* Network */,
 				DDB0DC2823C440FB0087D048 /* Constants */,
 				DD6C808E23C2C29C004AD177 /* AppDelegate.swift */,
 				DD6C80C623C2C840004AD177 /* SceneDelegate.swift */,
@@ -199,45 +215,36 @@
 		DD6C80C523C2C738004AD177 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				DDB0DC2323C428290087D048 /* Components */,
+				DDB0DC2323C428290087D048 /* Common Components */,
+				DD768DDE23C45DBA00803374 /* Index */,
 			);
 			path = Views;
 			sourceTree = "<group>";
 		};
-		DDB0DC2323C428290087D048 /* Components */ = {
+		DD768DDE23C45DBA00803374 /* Index */ = {
+			isa = PBXGroup;
+			children = (
+				DDF703AB23C6AA6500838D9A /* IndexViewController.swift */,
+				DDF703AD23C6AA6F00838D9A /* IndexViewModel.swift */,
+				DDF703AF23C6AA7700838D9A /* IndexModel.swift */,
+			);
+			path = Index;
+			sourceTree = "<group>";
+		};
+		DDB0DC2323C428290087D048 /* Common Components */ = {
 			isa = PBXGroup;
 			children = (
 				DD6C809223C2C29C004AD177 /* ViewController.swift */,
 			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		DDB0DC2623C440EC0087D048 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		DDB0DC2723C440F30087D048 /* Network */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Network;
+			path = "Common Components";
 			sourceTree = "<group>";
 		};
 		DDB0DC2823C440FB0087D048 /* Constants */ = {
 			isa = PBXGroup;
 			children = (
+				DDF703B323C6AE0500838D9A /* Constants.swift */,
 			);
 			path = Constants;
-			sourceTree = "<group>";
-		};
-		DDB0DC2923C441060087D048 /* Extension */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -500,7 +507,12 @@
 			files = (
 				DD6C809323C2C29C004AD177 /* ViewController.swift in Sources */,
 				DD6C808F23C2C29C004AD177 /* AppDelegate.swift in Sources */,
+				DDF703B023C6AA7700838D9A /* IndexModel.swift in Sources */,
 				DD6C80C723C2C840004AD177 /* SceneDelegate.swift in Sources */,
+				DDF703AC23C6AA6500838D9A /* IndexViewController.swift in Sources */,
+				DDF703AE23C6AA6F00838D9A /* IndexViewModel.swift in Sources */,
+				DD087CBF23C6FFA900B8CEB8 /* UIApplication+Statusbar.swift in Sources */,
+				DDF703B423C6AE0500838D9A /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -674,6 +686,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D debug";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hyopangworld.Hwahae;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

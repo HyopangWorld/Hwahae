@@ -66,4 +66,13 @@ class ViewController<ViewBindable>: UIViewController {
      주의: init 시점이 아닌 properties를 변경할 경우 viewDidLoad() 시점에 영향을 줄 수 있음
      */
     func initialize() {}
+
+    /*
+     [debug] 메모리 해제 확인
+     */
+    deinit {
+        #if debug
+        print("\(self) 메모리 해제")
+        #endif
+    }
 }
