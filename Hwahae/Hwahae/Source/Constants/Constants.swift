@@ -13,7 +13,7 @@ struct Constants {
     struct UI {
         struct Base {
             static let backgroundColor: UIColor = .white
-            static let fontSize: CGFloat = 15
+            static let fontSize: CGFloat = 16
             static let safeAreaInsetsTop = (UIApplication.shared.windows.first { $0.isKeyWindow })?.safeAreaInsets.top ?? 0
         }
 
@@ -27,9 +27,23 @@ struct Constants {
             static let cellHeight: CGFloat = 64
             static let indicatorHieght: CGFloat = 24
         }
+        
+        struct IndexCell {
+            static let imageHeightInset: CGFloat = 40
+            static let imageRadius: CGFloat = 14
+            static let titleTopMargin: CGFloat = 4
+            static let priceTopMargin: CGFloat = 2
+            static let leftMargin: CGFloat = 8
+            static let titleFont: UIFont = .systemFont(ofSize: Base.fontSize, weight: .bold)
+            static let priceFont: UIFont = .systemFont(ofSize: Base.fontSize, weight: .bold)
+            static let titleTextColor: UIColor = UIColor(displayP3Red: (20/255), green: (20/255), blue: (40/255), alpha: 1)
+            static let priceTextColor: UIColor = UIColor(displayP3Red: (171/255), green: (171/255), blue: (196/255), alpha: 1)
+        }
     }
 
     struct Text {
+        static let monetaryUnit = "원"
+        
         struct Index {
             static let searchPlaceholder = "검색".localizedCapitalized
         }

@@ -15,8 +15,9 @@ class ProductListCell: UICollectionViewCell {
 
     let productImageView = UIImageView()
     let titleLabel = KRWordWrapLabel()
-    let sellerLabel = UILabel()
+    let prieceLabel = UILabel()
 
+    typealias UI = Constants.UI.IndexCell
     var id: Int?
 
     override init(frame: CGRect) {
@@ -32,22 +33,17 @@ class ProductListCell: UICollectionViewCell {
     func setData(data: Data) {
         self.id = data.id
 
-        titleLabel.do {
-            $0.text = data.title
-        }
-
-        sellerLabel.do {
-            $0.text = data.price
-        }
+        titleLabel.text = data.title
+        prieceLabel.text = data.price
 
         productImageView.do {
             $0.kf.setImage(with: URL(string: data.thumbnail_image), placeholder: UIImage(named: "placeholder"))
             $0.snp.updateConstraints {
                 $0.top.leading.trailing.equalToSuperview()
                 $0.width.equalToSuperview()
-                $0.height.equalToSuperview().inset(40)
+                $0.height.equalToSuperview().inset(UI.imageHeightInset)
             }
-            $0.layer.cornerRadius = 14
+            $0.layer.cornerRadius = UI.imageRadius
         }
     }
 
@@ -58,15 +54,15 @@ class ProductListCell: UICollectionViewCell {
         }
 
         titleLabel.do {
-            $0.font = .systemFont(ofSize: 16, weight: .bold)
-            $0.textColor = UIColor(displayP3Red: (20/255), green: (20/255), blue: (40/255), alpha: 1)
+            $0.font = UI.titleFont
+            $0.textColor = UI.titleTextColor
             $0.numberOfLines = 2
             $0.lineBreakMode = .byWordWrapping
         }
 
-        sellerLabel.do {
-            $0.font = .systemFont(ofSize: 16, weight: .bold)
-            $0.textColor = UIColor(displayP3Red: (171/255), green: (171/255), blue: (196/255), alpha: 1)
+        prieceLabel.do {
+            $0.font = UI.priceFont
+            $0.textColor = UI.priceTextColor
             $0.numberOfLines = 1
         }
     }
@@ -74,23 +70,23 @@ class ProductListCell: UICollectionViewCell {
     func layout() {
         addSubview(productImageView)
         addSubview(titleLabel)
-        addSubview(sellerLabel)
+        addSubview(prieceLabel)
 
         productImageView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
             $0.centerX.equalToSuperview()
             $0.width.equalToSuperview()
-            $0.height.equalToSuperview().inset(40)
+            $0.height.equalToSuperview().inset(UI.imageHeightInset)
         }
 
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(productImageView.snp.bottom).offset(10)
-            $0.leading.trailing.equalToSuperview().inset(8)
+            $0.top.equalTo(productImageView.snp.bottom).offset(UI.titleTopMargin)
+            $0.leading.trailing.equalToSuperview().inset(UI.leftMargin)
         }
 
-        sellerLabel.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(2)
-            $0.leading.trailing.equalToSuperview().inset(8)
+        prieceLabel.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(UI.priceTopMargin)
+            $0.leading.trailing.equalToSuperview().inset(UI.leftMargin)
         }
     }
 }

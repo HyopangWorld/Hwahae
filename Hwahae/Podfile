@@ -17,6 +17,7 @@ target 'Hwahae' do
   pod 'SnapKit', '~> 5.0.1'
   pod 'Kingfisher', '~> 5.11.0'
   pod 'KRWordWrapLabel', '~> 2.1.1'
+  pod 'Toaster', '~> 2.2.0'
 
   # Other Swift Utilites
   pod 'Then', '~> 2.6.0'

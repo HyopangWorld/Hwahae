@@ -8,11 +8,18 @@
 
 import UIKit
 import RxSwift
-import SnapKit
-import Then
+import RxCocoa
 import RxAppState
+import Then
+import SnapKit
 
-protocol IndexViewBindable { }
+protocol IndexViewBindable {
+    var viewWillAppear: PublishRelay<Int> { get }
+    var viewWillFetch: PublishRelay<Int> { get }
+    var cellData: Driver<[ProductListCell.Data]> { get }
+    var reloadList: Signal<Void> { get }
+    var errorMessage: Signal<String> { get }
+}
 
 class IndexViewController: ViewController<IndexViewBindable> {
     let searchController = UISearchController(searchResultsController: nil)
@@ -24,12 +31,38 @@ class IndexViewController: ViewController<IndexViewBindable> {
 
     override func bind(_ viewModel: IndexViewBindable) {
         self.disposeBag = DisposeBag()
-    }
 
+        self.rx.viewWillAppear
+            .map { _ in 1 }
+            .bind(to: viewModel.viewWillAppear)
+            .disposed(by: disposeBag)
+
+        viewModel.cellData
+            .drive(collectionView.rx.items) { collection, row, data in
+                let index = IndexPath(row: row, section: 0)
+                guard let cell = collection.dequeueReusableCell(withReuseIdentifier: String(describing: ProductListCell.self), for: index)
+                    as? ProductListCell else { return UICollectionViewCell() }
+                cell.setData(data: data)
+                return cell
+        }
+        .disposed(by: disposeBag)
+        
+        viewModel.reloadList
+            .emit(onNext: { [weak self] _ in
+                self?.collectionView.reloadData()
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.errorMessage
+            .emit(to: self.rx.toast())
+            .disposed(by: disposeBag)
+        
+    }
+    
     override func attribute() {
         self.view.backgroundColor = Constants.UI.Base.backgroundColor
         UIApplication.shared.changeStatusbarColor(UI.searchBarColor)
-
+        
         searchController.do {
             $0.hidesNavigationBarDuringPresentation = false
             $0.searchResultsUpdater = self
@@ -41,12 +74,12 @@ class IndexViewController: ViewController<IndexViewBindable> {
                 $0.searchTextField.backgroundColor = .white
             }
         }
-
+        
         navigationItem.do {
             $0.hidesSearchBarWhenScrolling = false
             $0.titleView = searchController.searchBar
         }
-
+        
         let layout = UICollectionViewFlowLayout()
         layout.do {
             $0.scrollDirection = .vertical
@@ -58,7 +91,7 @@ class IndexViewController: ViewController<IndexViewBindable> {
             $0.headerReferenceSize = CGSize(width: view.bounds.width, height: UI.headerHieght)
             $0.footerReferenceSize = CGSize(width: view.bounds.width, height: UI.footerHieght)
         }
-
+        
         collectionView.do {
             $0.backgroundView = UIView()
             $0.backgroundView?.isHidden = true
@@ -67,17 +100,17 @@ class IndexViewController: ViewController<IndexViewBindable> {
             $0.setCollectionViewLayout(layout, animated: true)
             $0.showsVerticalScrollIndicator = false
         }
-
+        
         indicator.do {
             $0.animation = Animations.spin
             $0.tintColor = UIColor(red: (171/255), green: (171/255), blue: (196/255), alpha: 1)
         }
     }
-
+    
     override func layout() {
         collectionView.addSubview(indicator)
         view.addSubview(collectionView)
-
+        
         let collectionHeight = (navigationController?.navigationBar.bounds.height ?? 0) + Constants.UI.Base.safeAreaInsetsTop
         collectionView.snp.makeConstraints {
             $0.top.equalTo(collectionHeight)
@@ -85,7 +118,7 @@ class IndexViewController: ViewController<IndexViewBindable> {
             $0.trailing.equalToSuperview().inset(UI.sideMargin)
             $0.bottom.equalToSuperview()
         }
-
+        
         indicator.snp.makeConstraints {
             $0.bottom.equalToSuperview()
             $0.centerX.equalToSuperview()
