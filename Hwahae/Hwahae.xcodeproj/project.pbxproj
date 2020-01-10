@@ -20,6 +20,7 @@
 		DD31286F23C8413D00B85B46 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD31286E23C8413D00B85B46 /* Enums.swift */; };
 		DD31287223C84C3400B85B46 /* Reactive+UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD31287123C84C3400B85B46 /* Reactive+UIViewController.swift */; };
 		DD31287423C84E3600B85B46 /* String+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD31287323C84E3600B85B46 /* String+Utils.swift */; };
+		DD31287623C857AD00B85B46 /* Observable+Distinct.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD31287523C857AD00B85B46 /* Observable+Distinct.swift */; };
 		DD6C808F23C2C29C004AD177 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6C808E23C2C29C004AD177 /* AppDelegate.swift */; };
 		DD6C809323C2C29C004AD177 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6C809223C2C29C004AD177 /* ViewController.swift */; };
 		DD6C809823C2C29D004AD177 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD6C809723C2C29D004AD177 /* Assets.xcassets */; };
@@ -72,6 +73,7 @@
 		DD31286E23C8413D00B85B46 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		DD31287123C84C3400B85B46 /* Reactive+UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Reactive+UIViewController.swift"; sourceTree = "<group>"; };
 		DD31287323C84E3600B85B46 /* String+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Utils.swift"; sourceTree = "<group>"; };
+		DD31287523C857AD00B85B46 /* Observable+Distinct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Observable+Distinct.swift"; sourceTree = "<group>"; };
 		DD6C808B23C2C29C004AD177 /* Hwahae.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hwahae.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD6C808E23C2C29C004AD177 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DD6C809223C2C29C004AD177 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				DD087CBE23C6FFA900B8CEB8 /* UIApplication+Statusbar.swift */,
 				DD31287123C84C3400B85B46 /* Reactive+UIViewController.swift */,
 				DD31287323C84E3600B85B46 /* String+Utils.swift */,
+				DD31287523C857AD00B85B46 /* Observable+Distinct.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -584,6 +587,7 @@
 				DD31287423C84E3600B85B46 /* String+Utils.swift in Sources */,
 				DD31286623C83DDA00B85B46 /* ProductsNetwork.swift in Sources */,
 				DD31286F23C8413D00B85B46 /* Enums.swift in Sources */,
+				DD31287623C857AD00B85B46 /* Observable+Distinct.swift in Sources */,
 				DDF703B423C6AE0500838D9A /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

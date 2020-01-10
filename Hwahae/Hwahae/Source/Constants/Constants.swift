@@ -15,6 +15,7 @@ struct Constants {
             static let backgroundColor: UIColor = .white
             static let fontSize: CGFloat = 16
             static let safeAreaInsetsTop = (UIApplication.shared.windows.first { $0.isKeyWindow })?.safeAreaInsets.top ?? 0
+            static let isEdge: Bool = (safeAreaInsetsTop == 20)
         }
 
         struct Index {
