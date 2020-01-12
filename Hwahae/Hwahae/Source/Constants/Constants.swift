@@ -27,11 +27,14 @@ struct Constants {
             static let footerHieght: CGFloat = 96
             static let cellHeight: CGFloat = 64
             static let indicatorHieght: CGFloat = 24
+            static let indicatorColor: UIColor = UIColor(red: (171/255), green: (171/255), blue: (196/255), alpha: 1)
         }
         
         struct IndexCell {
             static let imageHeightInset: CGFloat = 40
             static let imageRadius: CGFloat = 14
+            static let imageBorderColor: CGColor = UIColor(red: (24/255), green: (24/255), blue: (80/255), alpha: 0.04).cgColor
+            static let imageBorderWidth: CGFloat = 1
             static let titleTopMargin: CGFloat = 4
             static let priceTopMargin: CGFloat = 2
             static let leftMargin: CGFloat = 8

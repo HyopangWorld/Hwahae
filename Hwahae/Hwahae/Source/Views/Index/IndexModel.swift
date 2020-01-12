@@ -16,10 +16,6 @@ struct ProductListModel {
         self.productsNetwork = productsNetwork
     }
     
-    func getProductList(page: Int) -> Observable<Result<[Product], ProductsNetworkError>> {
-        return productsNetwork.getProducts(page: page)
-    }
-    
     func getSkinTypeProductList(page: Int, skinType: SkinType) -> Observable<Result<[Product], ProductsNetworkError>> {
         return productsNetwork.getSkinTypeProducts(page: page, skinType: skinType)
     }

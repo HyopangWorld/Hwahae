@@ -43,7 +43,6 @@ class ProductListCell: UICollectionViewCell {
                 $0.width.equalToSuperview()
                 $0.height.equalToSuperview().inset(UI.imageHeightInset)
             }
-            $0.layer.cornerRadius = UI.imageRadius
         }
     }
 
@@ -51,6 +50,9 @@ class ProductListCell: UICollectionViewCell {
         productImageView.do {
             $0.clipsToBounds = true
             $0.contentMode = .scaleToFill
+            $0.layer.cornerRadius = UI.imageRadius
+            $0.layer.borderColor = UI.imageBorderColor
+            $0.layer.borderWidth = UI.imageBorderWidth
         }
 
         titleLabel.do {

@@ -17,23 +17,6 @@ class ProductsNetworkImpl: ProductsNetwork {
         self.session = session
     }
 
-    func getProducts(page: Int) -> Observable<Result<[Product], ProductsNetworkError>> {
-        guard let url = makeGetProductsComponents(page: page).url else {
-            let error = ProductsNetworkError.error("유효하지 않은 URL입니다.")
-            return .just(.failure(error))
-        }
-
-        return session.rx.data(request: URLRequest(url: url))
-            .map { data in
-                do {
-                    let response = try JSONDecoder().decode(ProductResponse<[Product]>.self, from: data)
-                    return .success(response.body)
-                } catch {
-                    return .failure(.error("getProducts API 에러"))
-                }
-            }
-    }
-
     func getSkinTypeProducts(page: Int, skinType: SkinType) -> Observable<Result<[Product], ProductsNetworkError>> {
         guard let url = makeGetSkinTypeProductsComponents(page: page, skinType: skinType).url else {
             let error = ProductsNetworkError.error("유효하지 않은 URL입니다.")
@@ -101,21 +84,14 @@ extension ProductsNetworkImpl {
         return components
     }
 
-    func makeGetProductsComponents(page: Int) -> URLComponents {
+    func makeGetSkinTypeProductsComponents(page: Int, skinType: SkinType) -> URLComponents {
         var components = makeAPIComponents()
         components.queryItems = [
             URLQueryItem(name: "page", value: "\(page)")
         ]
-
-        return components
-    }
-
-    func makeGetSkinTypeProductsComponents(page: Int, skinType: SkinType) -> URLComponents {
-        var components = makeAPIComponents()
-        components.queryItems = [
-            URLQueryItem(name: "page", value: "\(page)"),
-            URLQueryItem(name: "skin_type", value: "\(skinType)")
-        ]
+        if skinType != .all {
+            components.queryItems?.append(URLQueryItem(name: "skin_type", value: "\(skinType)"))
+        }
 
         return components
     }

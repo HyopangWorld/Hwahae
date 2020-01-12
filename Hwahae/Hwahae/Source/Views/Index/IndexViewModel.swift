@@ -14,8 +14,8 @@ import RxOptional
 struct IndexViewModel: IndexViewBindable {
     let disposeBag = DisposeBag()
     
-    let viewWillAppear = PublishRelay<Int>()
-    let viewWillFetch = PublishRelay<Int>()
+    let viewWillAppear = PublishRelay<(Int, SkinType)>()
+    let viewWillFetch = PublishRelay<(Int, SkinType)>()
     let cellData: Driver<[ProductListCell.Data]>
     let reloadList: Signal<Void>
     let errorMessage: Signal<String>
@@ -26,7 +26,7 @@ struct IndexViewModel: IndexViewBindable {
                 viewWillAppear.asObservable(),
                 viewWillFetch.asObservable()
             )
-            .flatMap(model.getProductList)
+            .flatMap(model.getSkinTypeProductList)
             .asObservable()
             .share()
         

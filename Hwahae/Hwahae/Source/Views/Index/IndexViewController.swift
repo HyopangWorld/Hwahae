@@ -10,12 +10,13 @@ import UIKit
 import RxSwift
 import RxCocoa
 import RxAppState
+import RxDataSources
 import Then
 import SnapKit
 
 protocol IndexViewBindable {
-    var viewWillAppear: PublishRelay<Int> { get }
-    var viewWillFetch: PublishRelay<Int> { get }
+    var viewWillAppear: PublishRelay<(Int, SkinType)> { get }
+    var viewWillFetch: PublishRelay<(Int, SkinType)> { get }
     var cellData: Driver<[ProductListCell.Data]> { get }
     var reloadList: Signal<Void> { get }
     var errorMessage: Signal<String> { get }
@@ -25,6 +26,7 @@ class IndexViewController: ViewController<IndexViewBindable> {
     let searchController = UISearchController(searchResultsController: nil)
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     let indicator = Indicator(image: UIImage(named: "outline_explore_black.png"))
+    let header = ProductListHeader()
     
     private typealias UI = Constants.UI.Index
     private typealias TEXT = Constants.Text.Index
@@ -33,11 +35,13 @@ class IndexViewController: ViewController<IndexViewBindable> {
     override func bind(_ viewModel: IndexViewBindable) {
         self.disposeBag = DisposeBag()
         
-        self.rx.viewWillAppear
-            .map { _ in 1 }
-            .bind(to: viewModel.viewWillAppear)
-            .disposed(by: disposeBag)
+        header.viewController = self
         
+        bindToView(viewModel: viewModel)
+        bindToViewModel(viewModel: viewModel)
+    }
+    
+    func bindToView(viewModel: IndexViewBindable) {
         viewModel.cellData
             .drive(collectionView.rx.items) { collection, row, data in
                 let index = IndexPath(row: row, section: 0)
@@ -60,8 +64,15 @@ class IndexViewController: ViewController<IndexViewBindable> {
         viewModel.errorMessage
             .emit(to: self.rx.toast())
             .disposed(by: disposeBag)
+    }
+    
+    func bindToViewModel(viewModel: IndexViewBindable) {
+        self.rx.viewWillAppear
+            .map { _ in (1, SkinType.all) }
+            .bind(to: viewModel.viewWillAppear)
+            .disposed(by: disposeBag)
         
-        collectionView.rx.contentOffset
+        let changePage = collectionView.rx.contentOffset
             .skipUntil(viewModel.reloadList.asObservable())
             .filter { [weak self] offset -> Bool in
                 let height = (self?.collectionView.collectionViewLayout.collectionViewContentSize.height ?? 0) - (self?.collectionView.frame.height ?? 0)
@@ -70,15 +81,24 @@ class IndexViewController: ViewController<IndexViewBindable> {
             }
             .map{ Int($0.y) }
             .distinct()
-            .delay(RxTimeInterval.seconds(3), scheduler: MainScheduler.instance) // indicator animation delay
+            .delay(RxTimeInterval.seconds(3), scheduler: MainScheduler.instance)
             .map { [weak self] _ -> Int? in
                 self?.page += 1
                 return self?.page
             }
             .filterNil()
+
+        let changeSkinType = header.skinType
+            .distinctUntilChanged()
+            .map { [weak self] skin -> SkinType in
+                self?.page = 1
+                return skin
+            }
+        
+        Observable.combineLatest(changePage.startWith(1), changeSkinType)
+            .skipUntil(viewModel.reloadList.asObservable())
             .bind(to: viewModel.viewWillFetch)
             .disposed(by: disposeBag)
-        
     }
     
     override func attribute() {
@@ -92,8 +112,8 @@ class IndexViewController: ViewController<IndexViewBindable> {
             $0.searchBar.do {
                 $0.placeholder = TEXT.searchPlaceholder
                 $0.backgroundColor = UI.searchBarColor
-                $0.showsCancelButton = false
                 $0.searchTextField.backgroundColor = .white
+                $0.tintColor = .white
             }
         }
         
@@ -105,12 +125,12 @@ class IndexViewController: ViewController<IndexViewBindable> {
         let layout = UICollectionViewFlowLayout()
         layout.do {
             $0.scrollDirection = .vertical
-            let size = view.frame.width / 2 - (UI.sideMargin + UI.centerMargin)  // 옆 마진 + 가운데 간격
+            let size = view.frame.width / 2 - (UI.sideMargin + UI.centerMargin)
             $0.itemSize = CGSize(width: size, height: size + UI.cellHeight)
             $0.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             $0.minimumLineSpacing = UI.bottomMargin
             $0.minimumInteritemSpacing = UI.centerMargin
-            $0.headerReferenceSize = CGSize(width: view.bounds.width, height: UI.headerHieght)
+            $0.headerReferenceSize = CGSize(width: view.bounds.width, height: UI.bottomMargin)
             $0.footerReferenceSize = CGSize(width: view.bounds.width, height: UI.footerHieght)
         }
         
@@ -118,24 +138,33 @@ class IndexViewController: ViewController<IndexViewBindable> {
             $0.backgroundView = UIView()
             $0.backgroundView?.isHidden = true
             $0.backgroundColor = .white
-            $0.register(ProductListCell.self, forCellWithReuseIdentifier: String(describing: ProductListCell.self))
             $0.setCollectionViewLayout(layout, animated: true)
             $0.showsVerticalScrollIndicator = false
+            $0.register(ProductListCell.self, forCellWithReuseIdentifier: String(describing: ProductListCell.self))
         }
         
         indicator.do {
             $0.animation = Animations.spin
-            $0.tintColor = UIColor(red: (171/255), green: (171/255), blue: (196/255), alpha: 1)
+            $0.tintColor = UI.indicatorColor
         }
+        
+        
     }
     
     override func layout() {
+        view.addSubview(header)
         collectionView.addSubview(indicator)
         view.addSubview(collectionView)
         
-        let collectionHeight = (navigationController?.navigationBar.bounds.height ?? 0) + Constants.UI.Base.safeAreaInsetsTop
-        collectionView.snp.makeConstraints {
+        let collectionHeight = searchController.searchBar.frame.height + Constants.UI.Base.safeAreaInsetsTop
+        header.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(collectionHeight)
+            $0.height.equalTo(UI.headerHieght)
+        }
+        
+        collectionView.snp.makeConstraints {
+            $0.top.equalTo(header.snp.bottom)
             $0.leading.equalToSuperview().offset(UI.sideMargin)
             $0.trailing.equalToSuperview().inset(UI.sideMargin)
             $0.bottom.equalToSuperview()

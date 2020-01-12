@@ -24,7 +24,6 @@ enum ProductsNetworkError: Error {
 }
 
 protocol ProductsNetwork {
-    func getProducts(page: Int) -> Observable<Result<[Product], ProductsNetworkError>>
     func getSkinTypeProducts(page: Int, skinType: SkinType) -> Observable<Result<[Product], ProductsNetworkError>>
     func getSearchProducts(keyword: String) -> Observable<Result<[Product], ProductsNetworkError>>
     func getProduct(id: Int) -> Observable<Result<[Product], ProductsNetworkError>>

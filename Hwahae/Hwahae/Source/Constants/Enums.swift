@@ -9,5 +9,21 @@
 import Foundation
 
 enum SkinType: String {
+    case all = "all"
     case oliy = "oliy"
+    case dry = "dry"
+    case sensitive = "sensitive"
+    
+    func getSkinTypeName() -> String {
+        switch self {
+        case .all:
+            return "모든 피부 타입"
+        case .oliy:
+            return "지성"
+        case .dry:
+            return "건성"
+        case .sensitive:
+            return "민감성"
+        }
+    }
 }
