@@ -36,9 +36,9 @@ class ProductListHeader: UIView {
             self?.skinTypeButton.setTitle(SkinType.all.getSkinTypeName(), for: .normal)
             self?.skinType.onNext(.all)
         }))
-        skinTypeActionSheet.addAction(UIAlertAction(title: SkinType.oliy.getSkinTypeName(), style: .default, handler: { [weak self] _ in
-            self?.skinTypeButton.setTitle(SkinType.oliy.getSkinTypeName(), for: .normal)
-            self?.skinType.onNext(.oliy)
+        skinTypeActionSheet.addAction(UIAlertAction(title: SkinType.oily.getSkinTypeName(), style: .default, handler: { [weak self] _ in
+            self?.skinTypeButton.setTitle(SkinType.oily.getSkinTypeName(), for: .normal)
+            self?.skinType.onNext(.oily)
         }))
         skinTypeActionSheet.addAction(UIAlertAction(title: SkinType.dry.getSkinTypeName(), style: .default, handler: { [weak self] _ in
             self?.skinTypeButton.setTitle(SkinType.dry.getSkinTypeName(), for: .normal)

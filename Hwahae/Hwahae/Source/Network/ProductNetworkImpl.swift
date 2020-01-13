@@ -12,6 +12,7 @@ import RxCocoa
 
 class ProductsNetworkImpl: ProductsNetwork {
     private let session: URLSession
+    private let timeoutInterval: TimeInterval = 15
 
     init(session: URLSession = .shared) {
         self.session = session
@@ -23,7 +24,7 @@ class ProductsNetworkImpl: ProductsNetwork {
             return .just(.failure(error))
         }
 
-        return session.rx.data(request: URLRequest(url: url))
+        return session.rx.data(request: URLRequest(url: url, timeoutInterval: timeoutInterval))
             .map { data in
                 do {
                     let response = try JSONDecoder().decode(ProductResponse<[Product]>.self, from: data)
@@ -40,7 +41,7 @@ class ProductsNetworkImpl: ProductsNetwork {
             return .just(.failure(error))
         }
 
-        return session.rx.data(request: URLRequest(url: url))
+        return session.rx.data(request: URLRequest(url: url, timeoutInterval: timeoutInterval))
             .map { data in
                 do {
                     let response = try JSONDecoder().decode(ProductResponse<[Product]>.self, from: data)
@@ -57,7 +58,7 @@ class ProductsNetworkImpl: ProductsNetwork {
             return .just(.failure(error))
         }
 
-        return session.rx.data(request: URLRequest(url: url))
+        return session.rx.data(request: URLRequest(url: url, timeoutInterval: timeoutInterval))
             .map { data in
                 do {
                     let response = try JSONDecoder().decode(ProductResponse<[Product]>.self, from: data)

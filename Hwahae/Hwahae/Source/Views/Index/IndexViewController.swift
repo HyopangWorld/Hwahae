@@ -15,8 +15,8 @@ import Then
 import SnapKit
 
 protocol IndexViewBindable {
-    var viewWillAppear: PublishRelay<(Int, SkinType)> { get }
     var viewWillFetch: PublishRelay<(Int, SkinType)> { get }
+    var viewWillReload: PublishRelay<(Int, SkinType)> { get }
     var cellData: Driver<[ProductListCell.Data]> { get }
     var reloadList: Signal<Void> { get }
     var errorMessage: Signal<String> { get }
@@ -25,7 +25,8 @@ protocol IndexViewBindable {
 class IndexViewController: ViewController<IndexViewBindable> {
     let searchController = UISearchController(searchResultsController: nil)
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    let indicator = Indicator(image: UIImage(named: "outline_explore_black.png"))
+    let fetchIndicator = Indicator(image: UIImage(named: "outline_explore_black.png"))
+    let reloadIndicator = UIActivityIndicatorView()
     let header = ProductListHeader()
     
     private typealias UI = Constants.UI.Index
@@ -42,6 +43,21 @@ class IndexViewController: ViewController<IndexViewBindable> {
     }
     
     func bindToView(viewModel: IndexViewBindable) {
+        viewModel.viewWillFetch.asObservable()
+            .subscribeOn(MainScheduler.instance)
+            .subscribe { [weak self] _ in
+                self?.collectionView.isScrollEnabled = true
+            }
+            .disposed(by: disposeBag)
+        
+        viewModel.viewWillReload.asObservable()
+            .subscribeOn(MainScheduler.instance)
+            .subscribe {[weak self] _ in
+                self?.reloadIndicator.startAnimating()
+                self?.collectionView.isScrollEnabled = true
+            }
+            .disposed(by: disposeBag)
+        
         viewModel.cellData
             .drive(collectionView.rx.items) { collection, row, data in
                 let index = IndexPath(row: row, section: 0)
@@ -54,9 +70,11 @@ class IndexViewController: ViewController<IndexViewBindable> {
         
         viewModel.reloadList
             .emit(onNext: { [weak self] _ in
-                self?.indicator.snp.updateConstraints {
+                self?.fetchIndicator.snp.updateConstraints {
                     $0.bottom.equalToSuperview().offset((self?.collectionView.collectionViewLayout.collectionViewContentSize.height ?? 0) - 20) // collection 높이 - 여백
                 }
+                self?.reloadIndicator.stopAnimating()
+                self?.collectionView.isScrollEnabled = true
                 self?.collectionView.reloadData()
             })
             .disposed(by: disposeBag)
@@ -69,34 +87,39 @@ class IndexViewController: ViewController<IndexViewBindable> {
     func bindToViewModel(viewModel: IndexViewBindable) {
         self.rx.viewWillAppear
             .map { _ in (1, SkinType.all) }
-            .bind(to: viewModel.viewWillAppear)
+            .bind(to: viewModel.viewWillFetch)
             .disposed(by: disposeBag)
         
-        let changePage = collectionView.rx.contentOffset
+        let skinTypeChange = header.skinType
+            .map { [weak self] skin -> SkinType in
+                self?.page = 1
+                self?.collectionView.goToScrollTop()
+                self?.reloadIndicator.startAnimating()
+                self?.collectionView.isScrollEnabled = false
+                return skin
+        }
+        
+        skinTypeChange
+            .skipUntil(viewModel.reloadList.asObservable())
+            .map { (1, $0) }
+            .bind(to: viewModel.viewWillReload)
+            .disposed(by: disposeBag)
+        
+        collectionView.rx.contentOffset
             .skipUntil(viewModel.reloadList.asObservable())
             .filter { [weak self] offset -> Bool in
                 let height = (self?.collectionView.collectionViewLayout.collectionViewContentSize.height ?? 0) - (self?.collectionView.frame.height ?? 0)
-                    + (Constants.UI.Base.isEdge ? 0 : Constants.UI.Base.safeAreaInsetsTop) // edge가 없으면 0으로 값을 잡는다.
+                + (Constants.UI.Base.isEdge ? 0 : Constants.UI.Base.safeAreaInsetsTop) // edge가 없으면 0으로 값을 잡는다.
                 return Int(offset.y - height) == 0
             }
             .map{ Int($0.y) }
             .distinct()
-            .delay(RxTimeInterval.seconds(3), scheduler: MainScheduler.instance)
             .map { [weak self] _ -> Int? in
                 self?.page += 1
                 return self?.page
             }
             .filterNil()
-
-        let changeSkinType = header.skinType
-            .distinctUntilChanged()
-            .map { [weak self] skin -> SkinType in
-                self?.page = 1
-                return skin
-            }
-        
-        Observable.combineLatest(changePage.startWith(1), changeSkinType)
-            .skipUntil(viewModel.reloadList.asObservable())
+            .withLatestFrom(skinTypeChange) { ($0, $1) }
             .bind(to: viewModel.viewWillFetch)
             .disposed(by: disposeBag)
     }
@@ -143,18 +166,19 @@ class IndexViewController: ViewController<IndexViewBindable> {
             $0.register(ProductListCell.self, forCellWithReuseIdentifier: String(describing: ProductListCell.self))
         }
         
-        indicator.do {
+        fetchIndicator.do {
             $0.animation = Animations.spin
             $0.tintColor = UI.indicatorColor
         }
         
-        
+        reloadIndicator.style = .gray
     }
     
     override func layout() {
         view.addSubview(header)
-        collectionView.addSubview(indicator)
+        collectionView.addSubview(fetchIndicator)
         view.addSubview(collectionView)
+        view.addSubview(reloadIndicator)
         
         let collectionHeight = searchController.searchBar.frame.height + Constants.UI.Base.safeAreaInsetsTop
         header.snp.makeConstraints {
@@ -170,10 +194,15 @@ class IndexViewController: ViewController<IndexViewBindable> {
             $0.bottom.equalToSuperview()
         }
         
-        indicator.snp.makeConstraints {
+        fetchIndicator.snp.makeConstraints {
             $0.bottom.equalToSuperview()
             $0.centerX.equalToSuperview()
             $0.width.height.equalTo(UI.indicatorHieght)
+        }
+        
+        reloadIndicator.snp.makeConstraints {
+            $0.centerX.centerY.equalToSuperview()
+            $0.width.height.equalTo(100)
         }
     }
 }

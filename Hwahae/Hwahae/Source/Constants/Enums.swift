@@ -10,7 +10,7 @@ import Foundation
 
 enum SkinType: String {
     case all = "all"
-    case oliy = "oliy"
+    case oily = "oily"
     case dry = "dry"
     case sensitive = "sensitive"
     
@@ -18,7 +18,7 @@ enum SkinType: String {
         switch self {
         case .all:
             return "모든 피부 타입"
-        case .oliy:
+        case .oily:
             return "지성"
         case .dry:
             return "건성"
