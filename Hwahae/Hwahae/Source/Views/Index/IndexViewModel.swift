@@ -21,29 +21,14 @@ struct IndexViewModel: IndexViewBindable {
     let errorMessage: Signal<String>
     
     init(model: ProductListModel = ProductListModel()){
-        let productListResult = viewWillFetch.asObservable()
+        let productListResult = Observable.merge(viewWillFetch.asObservable(), viewWillReload.asObservable())
             .flatMap(model.getSkinTypeProductList)
             .asObservable()
             .share()
         
-        let productReloadResult = viewWillReload.asObservable()
-            .flatMap(model.getSkinTypeProductList)
-            .asObservable()
-            .share()
+        let productReloadEmpty = viewWillReload.asObservable().map{ _ -> [Product] in return [] }
         
-        let productFetchValue = productListResult
-            .map { result -> [Product]? in
-                guard case .success(let value) = result else {
-                    return nil
-                }
-                return value
-            }
-            .filterNil()
-            .scan([]){ prev, newList in
-                return newList.isEmpty ? [] : prev + newList
-            }
-        
-        let productReloadValue = productReloadResult
+        let productListValue = productListResult
             .map { result -> [Product]? in
                 guard case .success(let value) = result else {
                     return nil
@@ -61,13 +46,14 @@ struct IndexViewModel: IndexViewBindable {
             }
             .filterNil()
 
-        self.cellData = Observable
-            .merge(productFetchValue, productReloadValue)
+        self.cellData = Observable.merge(productReloadEmpty, productListValue)
+            .scan([]){ prev, newList in
+                return newList.isEmpty ? [] : prev + newList
+            }
             .map(model.parseData)
             .asDriver(onErrorDriveWith: .empty())
 
-        self.reloadList = Observable
-            .merge(productFetchValue, productReloadValue)
+        self.reloadList = productListValue
             .map { _ in Void() }
             .asSignal(onErrorSignalWith: .empty())
 

@@ -23,11 +23,13 @@ class ProductsNetworkImpl: ProductsNetwork {
             let error = ProductsNetworkError.error("유효하지 않은 URL입니다.")
             return .just(.failure(error))
         }
+        print("여기1")
 
         return session.rx.data(request: URLRequest(url: url, timeoutInterval: timeoutInterval))
             .map { data in
                 do {
                     let response = try JSONDecoder().decode(ProductResponse<[Product]>.self, from: data)
+                    print("여기2")
                     return .success(response.body)
                 } catch {
                     return .failure(.error("getSkinTypeProducts API 에러"))
@@ -88,11 +90,9 @@ extension ProductsNetworkImpl {
     func makeGetSkinTypeProductsComponents(page: Int, skinType: SkinType) -> URLComponents {
         var components = makeAPIComponents()
         components.queryItems = [
-            URLQueryItem(name: "page", value: "\(page)")
+            URLQueryItem(name: "page", value: "\(page)"),
+            URLQueryItem(name: "skin_type", value: "\(skinType)")
         ]
-        if skinType != .all {
-            components.queryItems?.append(URLQueryItem(name: "skin_type", value: "\(skinType)"))
-        }
 
         return components
     }

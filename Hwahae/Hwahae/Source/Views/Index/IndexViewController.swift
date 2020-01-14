@@ -47,16 +47,16 @@ class IndexViewController: ViewController<IndexViewBindable> {
             .subscribeOn(MainScheduler.instance)
             .subscribe { [weak self] _ in
                 self?.collectionView.isScrollEnabled = true
-            }
-            .disposed(by: disposeBag)
+        }
+        .disposed(by: disposeBag)
         
         viewModel.viewWillReload.asObservable()
             .subscribeOn(MainScheduler.instance)
             .subscribe {[weak self] _ in
                 self?.reloadIndicator.startAnimating()
                 self?.collectionView.isScrollEnabled = true
-            }
-            .disposed(by: disposeBag)
+        }
+        .disposed(by: disposeBag)
         
         viewModel.cellData
             .drive(collectionView.rx.items) { collection, row, data in
@@ -86,30 +86,31 @@ class IndexViewController: ViewController<IndexViewBindable> {
     
     func bindToViewModel(viewModel: IndexViewBindable) {
         self.rx.viewWillAppear
-            .map { _ in (1, SkinType.all) }
+            .map { _ in (1, SkinType.oily) }
             .bind(to: viewModel.viewWillFetch)
             .disposed(by: disposeBag)
         
-        let skinTypeChange = header.skinType
-            .map { [weak self] skin -> SkinType in
+        header.skinType
+            .skipUntil(viewModel.reloadList.asObservable())
+            .map { (1, $0) }
+            .bind(to: viewModel.viewWillReload)
+            .disposed(by: disposeBag)
+        
+        header.skinType
+            .subscribeOn(MainScheduler.instance)
+            .subscribe { [weak self] _ in
                 self?.page = 1
                 self?.collectionView.goToScrollTop()
                 self?.reloadIndicator.startAnimating()
                 self?.collectionView.isScrollEnabled = false
-                return skin
-        }
-        
-        skinTypeChange
-            .skipUntil(viewModel.reloadList.asObservable())
-            .map { (1, $0) }
-            .bind(to: viewModel.viewWillReload)
+            }
             .disposed(by: disposeBag)
         
         collectionView.rx.contentOffset
             .skipUntil(viewModel.reloadList.asObservable())
             .filter { [weak self] offset -> Bool in
                 let height = (self?.collectionView.collectionViewLayout.collectionViewContentSize.height ?? 0) - (self?.collectionView.frame.height ?? 0)
-                + (Constants.UI.Base.isEdge ? 0 : Constants.UI.Base.safeAreaInsetsTop) // edge가 없으면 0으로 값을 잡는다.
+                    + (Constants.UI.Base.isEdge ? 0 : Constants.UI.Base.safeAreaInsetsTop) // edge가 없으면 0으로 값을 잡는다.
                 return Int(offset.y - height) == 0
             }
             .map{ Int($0.y) }
@@ -119,7 +120,7 @@ class IndexViewController: ViewController<IndexViewBindable> {
                 return self?.page
             }
             .filterNil()
-            .withLatestFrom(skinTypeChange) { ($0, $1) }
+            .withLatestFrom(header.skinType) { ($0, $1) }
             .bind(to: viewModel.viewWillFetch)
             .disposed(by: disposeBag)
     }

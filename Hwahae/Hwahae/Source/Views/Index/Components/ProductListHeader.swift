@@ -17,7 +17,7 @@ class ProductListHeader: UIView {
     let skinTypeActionSheet = UIAlertController(title: "피부 타입을 선택해주세요", message: "피부타입", preferredStyle: UIAlertController.Style.actionSheet)
     var viewController: UIViewController? = UIViewController()
     
-    let skinType = BehaviorSubject<SkinType>(value: .all)
+    let skinType = BehaviorSubject<SkinType>(value: .oily)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -32,10 +32,6 @@ class ProductListHeader: UIView {
     }
     
     func initalize() {
-        skinTypeActionSheet.addAction(UIAlertAction(title: SkinType.all.getSkinTypeName(), style: .default, handler: { [weak self] _ in
-            self?.skinTypeButton.setTitle(SkinType.all.getSkinTypeName(), for: .normal)
-            self?.skinType.onNext(.all)
-        }))
         skinTypeActionSheet.addAction(UIAlertAction(title: SkinType.oily.getSkinTypeName(), style: .default, handler: { [weak self] _ in
             self?.skinTypeButton.setTitle(SkinType.oily.getSkinTypeName(), for: .normal)
             self?.skinType.onNext(.oily)
@@ -62,7 +58,7 @@ class ProductListHeader: UIView {
     
     func attribute() {
         skinTypeButton.do {
-            $0.setTitle(SkinType.all.getSkinTypeName(), for: .normal)
+            $0.setTitle(SkinType.oily.getSkinTypeName(), for: .normal)
             $0.setTitleColor(.black, for: .normal)
             $0.titleLabel?.font = .systemFont(ofSize: 13)
         }
