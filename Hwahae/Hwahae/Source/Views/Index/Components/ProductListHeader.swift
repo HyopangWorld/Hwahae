@@ -11,10 +11,12 @@ import RxSwift
 import RxCocoa
 
 class ProductListHeader: UIView {
+    typealias TEXT = Constants.Text.IndexHeader
+    typealias UI = Constants.UI.IndexHeader
     let disposeBag = DisposeBag()
     
     let skinTypeButton = UIButton()
-    let skinTypeActionSheet = UIAlertController(title: "피부 타입을 선택해주세요", message: "피부타입", preferredStyle: UIAlertController.Style.actionSheet)
+    let skinTypeActionSheet = UIAlertController(title: TEXT.title, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
     var viewController: UIViewController? = UIViewController()
     
     let skinType = BehaviorSubject<SkinType>(value: .oily)
@@ -29,6 +31,8 @@ class ProductListHeader: UIView {
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)!
         initalize()
+        attribute()
+        layout()
     }
     
     func initalize() {
@@ -51,16 +55,13 @@ class ProductListHeader: UIView {
                 self?.viewController?.present(actionSheet, animated: true, completion: nil)
             }
             .disposed(by: disposeBag)
-        
-        attribute()
-        layout()
     }
     
     func attribute() {
         skinTypeButton.do {
             $0.setTitle(SkinType.oily.getSkinTypeName(), for: .normal)
             $0.setTitleColor(.black, for: .normal)
-            $0.titleLabel?.font = .systemFont(ofSize: 13)
+            $0.titleLabel?.font = UI.buttonFont
         }
     }
     

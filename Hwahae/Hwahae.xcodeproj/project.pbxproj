@@ -28,6 +28,7 @@
 		DD6C80A623C2C29E004AD177 /* HwahaeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6C80A523C2C29E004AD177 /* HwahaeTests.swift */; };
 		DD6C80B123C2C29E004AD177 /* HwahaeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6C80B023C2C29E004AD177 /* HwahaeUITests.swift */; };
 		DD6C80C723C2C840004AD177 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6C80C623C2C840004AD177 /* SceneDelegate.swift */; };
+		DDC73E2623CDA1B600CAE5C1 /* Observable+Distinct.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC73E2523CDA1B600CAE5C1 /* Observable+Distinct.swift */; };
 		DDF1043923CC456E003966CC /* UICollectionView+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF1043823CC456E003966CC /* UICollectionView+Utils.swift */; };
 		DDF703AC23C6AA6500838D9A /* IndexViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF703AB23C6AA6500838D9A /* IndexViewController.swift */; };
 		DDF703AE23C6AA6F00838D9A /* IndexViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF703AD23C6AA6F00838D9A /* IndexViewModel.swift */; };
@@ -88,6 +89,7 @@
 		DD6C80B023C2C29E004AD177 /* HwahaeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HwahaeUITests.swift; sourceTree = "<group>"; };
 		DD6C80B223C2C29E004AD177 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DD6C80C623C2C840004AD177 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		DDC73E2523CDA1B600CAE5C1 /* Observable+Distinct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+Distinct.swift"; sourceTree = "<group>"; };
 		DDF1043823CC456E003966CC /* UICollectionView+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Utils.swift"; sourceTree = "<group>"; };
 		DDF703AB23C6AA6500838D9A /* IndexViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexViewController.swift; sourceTree = "<group>"; };
 		DDF703AD23C6AA6F00838D9A /* IndexViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexViewModel.swift; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 		DD087CBD23C6FF8600B8CEB8 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				DDC73E2523CDA1B600CAE5C1 /* Observable+Distinct.swift */,
 				DD087CBE23C6FFA900B8CEB8 /* UIApplication+Statusbar.swift */,
 				DD31287123C84C3400B85B46 /* Reactive+UIViewController.swift */,
 				DD31287323C84E3600B85B46 /* String+Utils.swift */,
@@ -579,6 +582,7 @@
 				DD6C808F23C2C29C004AD177 /* AppDelegate.swift in Sources */,
 				DD31286B23C83F3A00B85B46 /* Product.swift in Sources */,
 				DDF703B023C6AA7700838D9A /* IndexModel.swift in Sources */,
+				DDC73E2623CDA1B600CAE5C1 /* Observable+Distinct.swift in Sources */,
 				DD31287223C84C3400B85B46 /* Reactive+UIViewController.swift in Sources */,
 				DD087CCB23C71BCD00B8CEB8 /* Indicator.swift in Sources */,
 				DD31286D23C840DF00B85B46 /* ProductResponse.swift in Sources */,

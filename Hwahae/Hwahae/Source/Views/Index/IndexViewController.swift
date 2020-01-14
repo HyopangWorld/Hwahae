@@ -1,3 +1,4 @@
+  
 //
 //  IndexViewController.swift
 //  Hwahae
@@ -5,7 +6,6 @@
 //  Created by 김효원 on 09/01/2020.
 //  Copyright © 2020 김효원. All rights reserved.
 //
-
 import UIKit
 import RxSwift
 import RxCocoa
@@ -107,6 +107,8 @@ class IndexViewController: ViewController<IndexViewBindable> {
                     + (Constants.UI.Base.isEdge ? 0 : Constants.UI.Base.safeAreaInsetsTop) // edge가 없으면 0으로 값을 잡는다.
                 return Int(offset.y - height) == 0
             }
+            .map{ Int($0.y) }
+            .distinct()
             .map { [weak self] _ -> Int? in
                 self?.page += 1
                 return self?.page
@@ -128,7 +130,7 @@ class IndexViewController: ViewController<IndexViewBindable> {
             $0.searchBar.do {
                 $0.placeholder = TEXT.searchPlaceholder
                 $0.backgroundColor = UI.searchBarColor
-                $0.searchTextField.backgroundColor = .white
+                if #available(iOS 13.0, *) { searchController.searchBar.searchTextField.backgroundColor = .white }
                 $0.tintColor = .white
             }
         }

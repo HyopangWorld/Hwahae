@@ -12,7 +12,7 @@ import RxCocoa
 
 class ProductsNetworkImpl: ProductsNetwork {
     private let session: URLSession
-    private let timeoutInterval: TimeInterval = 15
+    private let timeoutInterval: TimeInterval = 30
 
     init(session: URLSession = .shared) {
         self.session = session

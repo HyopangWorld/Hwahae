@@ -43,6 +43,10 @@ struct Constants {
             static let titleTextColor: UIColor = UIColor(displayP3Red: (20/255), green: (20/255), blue: (40/255), alpha: 1)
             static let priceTextColor: UIColor = UIColor(displayP3Red: (171/255), green: (171/255), blue: (196/255), alpha: 1)
         }
+        
+        struct IndexHeader {
+            static let buttonFont: UIFont = .systemFont(ofSize: 14, weight: .bold)
+        }
     }
 
     struct Text {
@@ -50,6 +54,11 @@ struct Constants {
         
         struct Index {
             static let searchPlaceholder = "검색".localizedCapitalized
+            static let title = "피부 타입을 선택해주세요".localizedCapitalized
+        }
+        
+        struct IndexHeader {
+            static let title = "피부 타입을 선택해주세요".localizedCapitalized
         }
     }
 }
