@@ -46,27 +46,28 @@ class IndexViewController: ViewController<IndexViewBindable> {
         viewModel.viewWillFetch.asObservable()
             .subscribeOn(MainScheduler.instance)
             .subscribe { [weak self] _ in
-                self?.collectionView.isScrollEnabled = true
-        }
-        .disposed(by: disposeBag)
+                self?.collectionView.isScrollEnabled = false
+            }
+            .disposed(by: disposeBag)
         
         viewModel.viewWillReload.asObservable()
             .subscribeOn(MainScheduler.instance)
             .subscribe {[weak self] _ in
+                self?.collectionView.goToScrollTop()
                 self?.reloadIndicator.startAnimating()
-                self?.collectionView.isScrollEnabled = true
-        }
-        .disposed(by: disposeBag)
+                self?.collectionView.isScrollEnabled = false
+            }
+            .disposed(by: disposeBag)
         
         viewModel.cellData
             .drive(collectionView.rx.items) { collection, row, data in
                 let index = IndexPath(row: row, section: 0)
-                guard let cell = collection.dequeueReusableCell(withReuseIdentifier: String(describing: ProductListCell.self), for: index)
-                    as? ProductListCell else { return UICollectionViewCell() }
+                guard let cell = collection.dequeueReusableCell(withReuseIdentifier: String(describing: ProductListCell.self), for: index) as? ProductListCell
+                    else { return UICollectionViewCell() }
                 cell.setData(data: data)
                 return cell
-        }
-        .disposed(by: disposeBag)
+            }
+            .disposed(by: disposeBag)
         
         viewModel.reloadList
             .emit(onNext: { [weak self] _ in
@@ -92,18 +93,11 @@ class IndexViewController: ViewController<IndexViewBindable> {
         
         header.skinType
             .skipUntil(viewModel.reloadList.asObservable())
-            .map { (1, $0) }
-            .bind(to: viewModel.viewWillReload)
-            .disposed(by: disposeBag)
-        
-        header.skinType
-            .subscribeOn(MainScheduler.instance)
-            .subscribe { [weak self] _ in
+            .map { [weak self] skinType -> (Int, SkinType) in
                 self?.page = 1
-                self?.collectionView.goToScrollTop()
-                self?.reloadIndicator.startAnimating()
-                self?.collectionView.isScrollEnabled = false
+                return (1, skinType)
             }
+            .bind(to: viewModel.viewWillReload)
             .disposed(by: disposeBag)
         
         collectionView.rx.contentOffset
@@ -113,8 +107,6 @@ class IndexViewController: ViewController<IndexViewBindable> {
                     + (Constants.UI.Base.isEdge ? 0 : Constants.UI.Base.safeAreaInsetsTop) // edge가 없으면 0으로 값을 잡는다.
                 return Int(offset.y - height) == 0
             }
-            .map{ Int($0.y) }
-            .distinct()
             .map { [weak self] _ -> Int? in
                 self?.page += 1
                 return self?.page
