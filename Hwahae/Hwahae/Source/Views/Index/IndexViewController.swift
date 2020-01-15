@@ -1,4 +1,3 @@
-  
 //
 //  IndexViewController.swift
 //  Hwahae
@@ -31,38 +30,17 @@ class IndexViewController: ViewController<IndexViewBindable> {
     
     private typealias UI = Constants.UI.Index
     private typealias TEXT = Constants.Text.Index
+    private typealias NUM = Constants.Number.Index
     private var page = 1
     
     override func bind(_ viewModel: IndexViewBindable) {
         self.disposeBag = DisposeBag()
-        
         header.viewController = self
-        
-        bindToView(viewModel: viewModel)
-        bindToViewModel(viewModel: viewModel)
-    }
-    
-    func bindToView(viewModel: IndexViewBindable) {
-        viewModel.viewWillFetch.asObservable()
-            .subscribeOn(MainScheduler.instance)
-            .subscribe { [weak self] _ in
-                self?.collectionView.isScrollEnabled = false
-            }
-            .disposed(by: disposeBag)
-        
-        viewModel.viewWillReload.asObservable()
-            .subscribeOn(MainScheduler.instance)
-            .subscribe {[weak self] _ in
-                self?.collectionView.goToScrollTop()
-                self?.reloadIndicator.startAnimating()
-                self?.collectionView.isScrollEnabled = false
-            }
-            .disposed(by: disposeBag)
         
         viewModel.cellData
             .drive(collectionView.rx.items) { collection, row, data in
-                let index = IndexPath(row: row, section: 0)
-                guard let cell = collection.dequeueReusableCell(withReuseIdentifier: String(describing: ProductListCell.self), for: index) as? ProductListCell
+                guard let cell = collection.dequeueReusableCell(withReuseIdentifier: String(describing: ProductListCell.self),
+                                                                for: IndexPath(row: row, section: 0)) as? ProductListCell
                     else { return UICollectionViewCell() }
                 cell.setData(data: data)
                 return cell
@@ -72,10 +50,8 @@ class IndexViewController: ViewController<IndexViewBindable> {
         viewModel.reloadList
             .emit(onNext: { [weak self] _ in
                 self?.fetchIndicator.snp.updateConstraints {
-                    $0.bottom.equalToSuperview().offset((self?.collectionView.collectionViewLayout.collectionViewContentSize.height ?? 0) - 20) // collection 높이 - 여백
+                    $0.bottom.equalToSuperview().offset((self?.collectionView.collectionViewLayout.collectionViewContentSize.height ?? 0) - UI.indicatorTopMargin) // collection 높이 - 여백
                 }
-                self?.reloadIndicator.stopAnimating()
-                self?.collectionView.isScrollEnabled = true
                 self?.collectionView.reloadData()
             })
             .disposed(by: disposeBag)
@@ -83,9 +59,7 @@ class IndexViewController: ViewController<IndexViewBindable> {
         viewModel.errorMessage
             .emit(to: self.rx.toast())
             .disposed(by: disposeBag)
-    }
-    
-    func bindToViewModel(viewModel: IndexViewBindable) {
+        
         self.rx.viewWillAppear
             .map { _ in (1, SkinType.oily) }
             .bind(to: viewModel.viewWillFetch)
@@ -94,21 +68,36 @@ class IndexViewController: ViewController<IndexViewBindable> {
         header.skinType
             .skipUntil(viewModel.reloadList.asObservable())
             .map { [weak self] skinType -> (Int, SkinType) in
+                self?.collectionView.goToScrollTop()
                 self?.page = 1
                 return (1, skinType)
             }
             .bind(to: viewModel.viewWillReload)
             .disposed(by: disposeBag)
         
-        collectionView.rx.contentOffset
+        let collectionFetch = collectionView.rx.contentOffset
             .skipUntil(viewModel.reloadList.asObservable())
             .filter { [weak self] offset -> Bool in
                 let height = (self?.collectionView.collectionViewLayout.collectionViewContentSize.height ?? 0) - (self?.collectionView.frame.height ?? 0)
                     + (Constants.UI.Base.isEdge ? 0 : Constants.UI.Base.safeAreaInsetsTop) // edge가 없으면 0으로 값을 잡는다.
                 return Int(offset.y - height) == 0
             }
-            .map{ Int($0.y) }
-            .distinct()
+            .map { Int($0.y) }
+        
+        let collectionReload = viewModel.viewWillReload.asObservable().map { _ -> [Int] in return [] }
+        
+        Observable.merge(collectionReload, collectionFetch.map{ [$0] } )
+            .withLatestFrom(collectionView.rx.willDisplayCell) { ($0, $1.at) }
+            .filter{ [weak self] (val, at) in
+                let lastAt = NUM.listCount * (self?.page ?? 0) - 1
+                return val == [] ? true : (at.row == lastAt)
+            }
+            .map { (val, _) in val }
+            .scan([]){ prev, newVal -> [Int] in
+                if prev.contains(newVal.first ?? 0) { return prev + [0] }
+                return newVal.isEmpty ? [] : prev + newVal
+            }
+            .filter { ($0.last ?? 0) != 0 }
             .map { [weak self] _ -> Int? in
                 self?.page += 1
                 return self?.page

@@ -28,6 +28,7 @@ struct Constants {
             static let cellHeight: CGFloat = 64
             static let indicatorHieght: CGFloat = 24
             static let indicatorColor: UIColor = UIColor(red: (171/255), green: (171/255), blue: (196/255), alpha: 1)
+            static let indicatorTopMargin: CGFloat = 20
         }
         
         struct IndexCell {
@@ -59,6 +60,12 @@ struct Constants {
         
         struct IndexHeader {
             static let title = "피부 타입을 선택해주세요".localizedCapitalized
+        }
+    }
+    
+    struct Number {
+        struct Index {
+            static let listCount = 20
         }
     }
 }
