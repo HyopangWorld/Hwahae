@@ -15,7 +15,9 @@ class ProductListHeader: UIView {
     typealias UI = Constants.UI.IndexHeader
     let disposeBag = DisposeBag()
     
-    let skinTypeButton = UIButton()
+    let skinTypeLabel = UILabel()
+    let arrowImageView = UIImageView()
+    let skinTypeButton = UIView()
     let skinTypeActionSheet = UIAlertController(title: TEXT.title, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
     var viewController: UIViewController? = UIViewController()
     
@@ -37,40 +39,53 @@ class ProductListHeader: UIView {
     
     func initalize() {
         skinTypeActionSheet.addAction(UIAlertAction(title: SkinType.oily.getSkinTypeName(), style: .default, handler: { [weak self] _ in
-            self?.skinTypeButton.setTitle(SkinType.oily.getSkinTypeName(), for: .normal)
+            self?.skinTypeLabel.text = SkinType.oily.getSkinTypeName()
             self?.skinType.onNext(.oily)
         }))
         skinTypeActionSheet.addAction(UIAlertAction(title: SkinType.dry.getSkinTypeName(), style: .default, handler: { [weak self] _ in
-            self?.skinTypeButton.setTitle(SkinType.dry.getSkinTypeName(), for: .normal)
+            self?.skinTypeLabel.text = SkinType.dry.getSkinTypeName()
             self?.skinType.onNext(.dry)
         }))
         skinTypeActionSheet.addAction(UIAlertAction(title: SkinType.sensitive.getSkinTypeName(), style: .default, handler: { [weak self] _ in
-            self?.skinTypeButton.setTitle(SkinType.sensitive.getSkinTypeName(), for: .normal)
+            self?.skinTypeLabel.text = SkinType.sensitive.getSkinTypeName()
             self?.skinType.onNext(.sensitive)
         }))
         
-        skinTypeButton.rx.controlEvent(.touchUpInside).asObservable()
-            .subscribe { [weak self] _ in
-                guard let actionSheet = self?.skinTypeActionSheet else { return }
-                self?.viewController?.present(actionSheet, animated: true, completion: nil)
-            }
-            .disposed(by: disposeBag)
+        skinTypeButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(doPresentActionSheet)))
+    }
+    
+    @objc func doPresentActionSheet() {
+        self.viewController?.present(skinTypeActionSheet, animated: true, completion: nil)
     }
     
     func attribute() {
-        skinTypeButton.do {
-            $0.setTitle(SkinType.oily.getSkinTypeName(), for: .normal)
-            $0.setTitleColor(.black, for: .normal)
-            $0.titleLabel?.font = UI.buttonFont
+        skinTypeLabel.do {
+            $0.text = SkinType.oily.getSkinTypeName()
+            $0.font = UI.buttonFont
+            $0.textAlignment = .right
         }
+        
+        arrowImageView.image = UIImage(named: "arrow_down_black.png")
     }
     
     func layout() {
+        skinTypeButton.addSubview(skinTypeLabel)
+        skinTypeButton.addSubview(arrowImageView)
         self.addSubview(skinTypeButton)
         
+        arrowImageView.snp.makeConstraints {
+            $0.trailing.height.centerY.equalToSuperview()
+            $0.width.equalTo(24)
+        }
+        
+        skinTypeLabel.snp.makeConstraints {
+            $0.trailing.equalTo(arrowImageView.snp.leading)
+            $0.leading.height.centerY.equalToSuperview()
+        }
+        
         skinTypeButton.snp.makeConstraints {
-            $0.trailing.height.centerY.equalToSuperview().inset(10)
-            $0.width.equalTo(100)
+            $0.trailing.height.centerY.equalToSuperview().inset(12)
+            $0.width.equalTo(104)
         }
     }
 }

@@ -25,7 +25,6 @@ class IndexViewController: ViewController<IndexViewBindable> {
     let searchController = UISearchController(searchResultsController: nil)
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     let fetchIndicator = Indicator(image: UIImage(named: "outline_explore_black.png"))
-    let reloadIndicator = UIActivityIndicatorView()
     let header = ProductListHeader()
     
     private typealias UI = Constants.UI.Index
@@ -39,8 +38,7 @@ class IndexViewController: ViewController<IndexViewBindable> {
         
         viewModel.cellData
             .drive(collectionView.rx.items) { collection, row, data in
-                guard let cell = collection.dequeueReusableCell(withReuseIdentifier: String(describing: ProductListCell.self),
-                                                                for: IndexPath(row: row, section: 0)) as? ProductListCell
+                guard let cell = collection.dequeueReusableCell(withReuseIdentifier: String(describing: ProductListCell.self), for: IndexPath(row: row, section: 0)) as? ProductListCell
                     else { return UICollectionViewCell() }
                 cell.setData(data: data)
                 return cell
@@ -86,11 +84,11 @@ class IndexViewController: ViewController<IndexViewBindable> {
         
         let collectionReload = viewModel.viewWillReload.asObservable().map { _ -> [Int] in return [] }
         
-        Observable.merge(collectionReload, collectionFetch.map{ [$0] } )
+        Observable.merge(collectionReload, collectionFetch.map{ [$0] })
             .withLatestFrom(collectionView.rx.willDisplayCell) { ($0, $1.at) }
             .filter{ [weak self] (val, at) in
                 let lastAt = NUM.listCount * (self?.page ?? 0) - 1
-                return val == [] ? true : (at.row == lastAt)
+                return val == [] ? true : (lastAt - 2 <= at.row)
             }
             .map { (val, _) in val }
             .scan([]){ prev, newVal -> [Int] in
@@ -154,15 +152,12 @@ class IndexViewController: ViewController<IndexViewBindable> {
             $0.animation = Animations.spin
             $0.tintColor = UI.indicatorColor
         }
-        
-        reloadIndicator.style = .gray
     }
     
     override func layout() {
         view.addSubview(header)
         collectionView.addSubview(fetchIndicator)
         view.addSubview(collectionView)
-        view.addSubview(reloadIndicator)
         
         let collectionHeight = searchController.searchBar.frame.height + Constants.UI.Base.safeAreaInsetsTop
         header.snp.makeConstraints {
@@ -183,11 +178,10 @@ class IndexViewController: ViewController<IndexViewBindable> {
             $0.centerX.equalToSuperview()
             $0.width.height.equalTo(UI.indicatorHieght)
         }
+    }
+    
+    deinit {
         
-        reloadIndicator.snp.makeConstraints {
-            $0.centerX.centerY.equalToSuperview()
-            $0.width.height.equalTo(100)
-        }
     }
 }
 
