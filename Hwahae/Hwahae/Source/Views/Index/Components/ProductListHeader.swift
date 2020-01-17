@@ -55,10 +55,12 @@ class ProductListHeader: UIView {
     }
     
     @objc func doPresentActionSheet() {
-        self.viewController?.present(skinTypeActionSheet, animated: true, completion: nil)
+        viewController?.present(skinTypeActionSheet, animated: true, completion: nil)
     }
     
     func attribute() {
+        self.backgroundColor = .white
+        
         skinTypeLabel.do {
             $0.text = SkinType.oily.getSkinTypeName()
             $0.font = UI.buttonFont
@@ -75,7 +77,7 @@ class ProductListHeader: UIView {
         
         arrowImageView.snp.makeConstraints {
             $0.trailing.height.centerY.equalToSuperview()
-            $0.width.equalTo(24)
+            $0.width.equalTo(UI.arrowWidth)
         }
         
         skinTypeLabel.snp.makeConstraints {
@@ -84,8 +86,8 @@ class ProductListHeader: UIView {
         }
         
         skinTypeButton.snp.makeConstraints {
-            $0.trailing.height.centerY.equalToSuperview().inset(12)
-            $0.width.equalTo(104)
+            $0.trailing.height.centerY.equalToSuperview().inset(UI.buttonMargin)
+            $0.width.equalTo(UI.buttonWidth)
         }
     }
 }

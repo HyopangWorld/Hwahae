@@ -16,6 +16,7 @@ struct IndexViewModel: IndexViewBindable {
     
     let viewWillFetch = PublishRelay<(Int, SkinType)>()
     let viewWillReload = PublishRelay<(Int, SkinType)>()
+    let viewWillSearch = PublishRelay<String>()
     let cellData: Driver<[ProductListCell.Data]>
     let reloadList: Signal<Void>
     let errorMessage: Signal<String>
@@ -26,9 +27,12 @@ struct IndexViewModel: IndexViewBindable {
             .asObservable()
             .share()
         
-        let productReloadEmpty = viewWillReload.asObservable().map { _ -> [Product] in return [] }
+        let prouductSearchResult = viewWillSearch
+            .flatMap(model.getSearchProductList)
+            .asObservable()
+            .share()
         
-        let productListValue = productListResult
+        let productListValue = Observable.merge(productListResult, prouductSearchResult)
             .map { result -> [Product]? in
                 guard case .success(let value) = result else {
                     return nil
@@ -37,7 +41,13 @@ struct IndexViewModel: IndexViewBindable {
             }
             .filterNil()
         
-        let productListError = productListResult
+        let productEmptyListValue = Observable.merge(
+            viewWillSearch.map { _ in Void() }.asObservable(),
+            viewWillReload.map { _ in Void() }.asObservable())
+            .map { _ -> [Product] in return [] }
+            .share()
+        
+        let productListError = Observable.merge(productListResult, prouductSearchResult)
             .map { result -> String? in
                 guard case .failure(let error) = result else {
                     return nil
@@ -46,7 +56,7 @@ struct IndexViewModel: IndexViewBindable {
             }
             .filterNil()
 
-        self.cellData = Observable.merge(productReloadEmpty, productListValue)
+        self.cellData = Observable.merge(productEmptyListValue, productListValue)
             .scan([]){ prev, newList in
                 return newList.isEmpty ? [] : prev + newList
             }

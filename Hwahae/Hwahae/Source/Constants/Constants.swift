@@ -29,9 +29,11 @@ struct Constants {
             static let indicatorHieght: CGFloat = 24
             static let indicatorColor: UIColor = UIColor(red: (171/255), green: (171/255), blue: (196/255), alpha: 1)
             static let indicatorTopMargin: CGFloat = 20
+            static let buttonFont: UIFont = .systemFont(ofSize: 14, weight: .bold)
         }
         
         struct IndexCell {
+            static let height: CGFloat = 236
             static let imageHeightInset: CGFloat = 40
             static let imageRadius: CGFloat = 14
             static let imageBorderColor: CGColor = UIColor(red: (24/255), green: (24/255), blue: (80/255), alpha: 0.04).cgColor
@@ -47,6 +49,9 @@ struct Constants {
         
         struct IndexHeader {
             static let buttonFont: UIFont = .systemFont(ofSize: 14, weight: .bold)
+            static let arrowWidth: CGFloat = 24
+            static let buttonMargin: CGFloat = 12
+            static let buttonWidth: CGFloat = 104
         }
     }
 
@@ -65,7 +70,8 @@ struct Constants {
     
     struct Number {
         struct Index {
-            static let listCount = 20
+            static let listCount: Int = 20
+            static let lastCells: Int = 5
         }
     }
 }

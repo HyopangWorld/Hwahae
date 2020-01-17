@@ -12,6 +12,7 @@ target 'Hwahae' do
   pod 'RxOptional', '~> 4.1.0'
   pod 'RxAppState'
   pod 'RxDataSources'
+  pod 'RxSwiftExt', '~> 5'
 
   # UI (Autolayout, Image, Animation, Label)
   pod 'SnapKit', '~> 5.0.1'

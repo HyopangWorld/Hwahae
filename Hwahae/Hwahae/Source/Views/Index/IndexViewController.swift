@@ -10,12 +10,14 @@ import RxSwift
 import RxCocoa
 import RxAppState
 import RxDataSources
+import RxSwiftExt
 import Then
 import SnapKit
 
 protocol IndexViewBindable {
     var viewWillFetch: PublishRelay<(Int, SkinType)> { get }
     var viewWillReload: PublishRelay<(Int, SkinType)> { get }
+    var viewWillSearch: PublishRelay<String> { get }
     var cellData: Driver<[ProductListCell.Data]> { get }
     var reloadList: Signal<Void> { get }
     var errorMessage: Signal<String> { get }
@@ -23,8 +25,10 @@ protocol IndexViewBindable {
 
 class IndexViewController: ViewController<IndexViewBindable> {
     let searchController = UISearchController(searchResultsController: nil)
+    let collectionLayout = UICollectionViewFlowLayout()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     let fetchIndicator = Indicator(image: UIImage(named: "outline_explore_black.png"))
+    let reloadIndicator = UIActivityIndicatorView()
     let header = ProductListHeader()
     
     private typealias UI = Constants.UI.Index
@@ -36,10 +40,34 @@ class IndexViewController: ViewController<IndexViewBindable> {
         self.disposeBag = DisposeBag()
         header.viewController = self
         
+        bindModelToView(viewModel)
+        bindViewToModel(viewModel)
+        
+        collectionView.rx.contentOffset
+            .filter { $0.y > 0 }
+            .pairwise()
+            .subscribeOn(MainScheduler.instance)
+            .subscribe { [weak self] event in
+                guard let prev = event.element?.0.y, let new = event.element?.1.y else { return }
+                let y = (self?.searchController.searchBar.frame.height ?? 0) + Constants.UI.Base.safeAreaInsetsTop
+                
+                if new >= Constants.UI.IndexCell.height + Constants.UI.Index.headerHieght {
+                    self?.header.frame = CGRect(x: 0, y: y - (self?.header.frame.height ?? 0), width: self?.header.frame.width ?? 0, height: self?.header.frame.height ?? 0)
+                } else if new <= Constants.UI.IndexCell.height {
+                    self?.header.frame = CGRect(x: 0, y: y, width: self?.header.frame.width ?? 0, height: self?.header.frame.height ?? 0)
+                } else {
+                    guard let frame = self?.header.frame.offsetBy(dx: 0, dy: (prev - new)) else { return }
+                    self?.header.frame = frame
+                }
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    func bindModelToView(_ viewModel: IndexViewBindable) {
         viewModel.cellData
             .drive(collectionView.rx.items) { collection, row, data in
-                guard let cell = collection.dequeueReusableCell(withReuseIdentifier: String(describing: ProductListCell.self), for: IndexPath(row: row, section: 0)) as? ProductListCell
-                    else { return UICollectionViewCell() }
+                guard let cell = collection.dequeueReusableCell(withReuseIdentifier: String(describing: ProductListCell.self), for: IndexPath(row: row, section: 0))
+                    as? ProductListCell else { return UICollectionViewCell() }
                 cell.setData(data: data)
                 return cell
             }
@@ -47,9 +75,9 @@ class IndexViewController: ViewController<IndexViewBindable> {
         
         viewModel.reloadList
             .emit(onNext: { [weak self] _ in
-                self?.fetchIndicator.snp.updateConstraints {
-                    $0.bottom.equalToSuperview().offset((self?.collectionView.collectionViewLayout.collectionViewContentSize.height ?? 0) - UI.indicatorTopMargin) // collection 높이 - 여백
+                self?.fetchIndicator.snp.updateConstraints { $0.bottom.equalToSuperview().offset((self?.collectionView.collectionViewLayout.collectionViewContentSize.height ?? 0) - UI.indicatorTopMargin)
                 }
+                self?.reloadIndicator.isHidden = true
                 self?.collectionView.reloadData()
             })
             .disposed(by: disposeBag)
@@ -57,13 +85,37 @@ class IndexViewController: ViewController<IndexViewBindable> {
         viewModel.errorMessage
             .emit(to: self.rx.toast())
             .disposed(by: disposeBag)
-        
+
+        viewModel.viewWillSearch.asObservable()
+            .subscribeOn(MainScheduler.instance)
+            .subscribe { [weak self] _ in
+                self?.header.isHidden = true
+                self?.fetchIndicator.isHidden = true
+                self?.reloadIndicator.isHidden = false
+                self?.reloadIndicator.startAnimating()
+            }
+            .disposed(by: disposeBag)
+
+        viewModel.viewWillReload.asObservable()
+            .subscribeOn(MainScheduler.instance)
+            .subscribe { [weak self] _ in
+                self?.header.isHidden = false
+                self?.fetchIndicator.isHidden = false
+                self?.reloadIndicator.isHidden = false
+                self?.reloadIndicator.startAnimating()
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    func bindViewToModel(_ viewModel: IndexViewBindable) {
         self.rx.viewWillAppear
             .map { _ in (1, SkinType.oily) }
-            .bind(to: viewModel.viewWillFetch)
+            .bind(to: viewModel.viewWillReload)
             .disposed(by: disposeBag)
         
-        header.skinType
+        Observable.merge(
+            header.skinType,
+            searchController.searchBar.rx.cancelButtonClicked.withLatestFrom(header.skinType).asObservable())
             .skipUntil(viewModel.reloadList.asObservable())
             .map { [weak self] skinType -> (Int, SkinType) in
                 self?.collectionView.goToScrollTop()
@@ -76,8 +128,7 @@ class IndexViewController: ViewController<IndexViewBindable> {
         let collectionFetch = collectionView.rx.contentOffset
             .skipUntil(viewModel.reloadList.asObservable())
             .filter { [weak self] offset -> Bool in
-                let height = (self?.collectionView.collectionViewLayout.collectionViewContentSize.height ?? 0) - (self?.collectionView.frame.height ?? 0)
-                    + (Constants.UI.Base.isEdge ? 0 : Constants.UI.Base.safeAreaInsetsTop) // edge가 없으면 0으로 값을 잡는다.
+                let height = (self?.collectionView.collectionViewLayout.collectionViewContentSize.height ?? 0) - (self?.collectionView.frame.height ?? 0) + (Constants.UI.Base.isEdge ? 0 : Constants.UI.Base.safeAreaInsetsTop) // edge가 없으면 0으로 값을 잡는다.
                 return Int(offset.y - height) == 0
             }
             .map { Int($0.y) }
@@ -85,10 +136,11 @@ class IndexViewController: ViewController<IndexViewBindable> {
         let collectionReload = viewModel.viewWillReload.asObservable().map { _ -> [Int] in return [] }
         
         Observable.merge(collectionReload, collectionFetch.map{ [$0] })
+            .skipUntil(searchController.searchBar.rx.cancelButtonClicked.startWith(Void()))
             .withLatestFrom(collectionView.rx.willDisplayCell) { ($0, $1.at) }
             .filter{ [weak self] (val, at) in
                 let lastAt = NUM.listCount * (self?.page ?? 0) - 1
-                return val == [] ? true : (lastAt - 2 <= at.row)
+                return val == [] ? true : (lastAt - Constants.Number.Index.lastCells <= at.row) // 허용 범위
             }
             .map { (val, _) in val }
             .scan([]){ prev, newVal -> [Int] in
@@ -104,6 +156,13 @@ class IndexViewController: ViewController<IndexViewBindable> {
             .withLatestFrom(header.skinType) { ($0, $1) }
             .bind(to: viewModel.viewWillFetch)
             .disposed(by: disposeBag)
+        
+        searchController.searchBar.rx.textDidEndEditing.asObservable()
+            .withLatestFrom(searchController.searchBar.rx.text)
+            .filter { $0 != "" }
+            .filterNil()
+            .bind(to: viewModel.viewWillSearch)
+            .disposed(by: disposeBag)
     }
     
     override func attribute() {
@@ -112,7 +171,6 @@ class IndexViewController: ViewController<IndexViewBindable> {
         
         searchController.do {
             $0.hidesNavigationBarDuringPresentation = false
-            $0.searchResultsUpdater = self
             $0.obscuresBackgroundDuringPresentation = false
             $0.searchBar.do {
                 $0.placeholder = TEXT.searchPlaceholder
@@ -127,15 +185,14 @@ class IndexViewController: ViewController<IndexViewBindable> {
             $0.titleView = searchController.searchBar
         }
         
-        let layout = UICollectionViewFlowLayout()
-        layout.do {
+        collectionLayout.do {
             $0.scrollDirection = .vertical
             let size = view.frame.width / 2 - (UI.sideMargin + UI.centerMargin)
             $0.itemSize = CGSize(width: size, height: size + UI.cellHeight)
             $0.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             $0.minimumLineSpacing = UI.bottomMargin
             $0.minimumInteritemSpacing = UI.centerMargin
-            $0.headerReferenceSize = CGSize(width: view.bounds.width, height: UI.bottomMargin)
+            $0.headerReferenceSize = CGSize(width: view.bounds.width, height: UI.bottomMargin + UI.headerHieght)
             $0.footerReferenceSize = CGSize(width: view.bounds.width, height: UI.footerHieght)
         }
         
@@ -143,7 +200,7 @@ class IndexViewController: ViewController<IndexViewBindable> {
             $0.backgroundView = UIView()
             $0.backgroundView?.isHidden = true
             $0.backgroundColor = .white
-            $0.setCollectionViewLayout(layout, animated: true)
+            $0.setCollectionViewLayout(collectionLayout, animated: true)
             $0.showsVerticalScrollIndicator = false
             $0.register(ProductListCell.self, forCellWithReuseIdentifier: String(describing: ProductListCell.self))
         }
@@ -155,9 +212,10 @@ class IndexViewController: ViewController<IndexViewBindable> {
     }
     
     override func layout() {
-        view.addSubview(header)
         collectionView.addSubview(fetchIndicator)
         view.addSubview(collectionView)
+        view.addSubview(header)
+        view.addSubview(reloadIndicator)
         
         let collectionHeight = searchController.searchBar.frame.height + Constants.UI.Base.safeAreaInsetsTop
         header.snp.makeConstraints {
@@ -166,25 +224,28 @@ class IndexViewController: ViewController<IndexViewBindable> {
             $0.height.equalTo(UI.headerHieght)
         }
         
+        reloadIndicator.snp.makeConstraints {
+            $0.centerX.centerY.equalToSuperview()
+            $0.width.height.equalTo(UI.indicatorHieght)
+        }
+        
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(header.snp.bottom)
+            $0.top.equalTo(collectionHeight)
             $0.leading.equalToSuperview().offset(UI.sideMargin)
             $0.trailing.equalToSuperview().inset(UI.sideMargin)
             $0.bottom.equalToSuperview()
         }
         
         fetchIndicator.snp.makeConstraints {
-            $0.bottom.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(UIScreen.main.bounds.height/2)
             $0.centerX.equalToSuperview()
             $0.width.height.equalTo(UI.indicatorHieght)
         }
     }
     
     deinit {
-        
+        #if debug
+        print("\(self) 메모리 해제")
+        #endif
     }
-}
-
-extension IndexViewController: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) { }
 }
