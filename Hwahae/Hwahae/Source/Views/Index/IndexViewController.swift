@@ -61,6 +61,18 @@ class IndexViewController: ViewController<IndexViewBindable> {
                 }
             }
             .disposed(by: disposeBag)
+        
+        collectionView.rx.itemSelected
+            .subscribe { [weak self] event in
+                guard let indexpath = event.element else { return }
+                guard let cell = (self?.collectionView.cellForItem(at: indexpath) as? ProductListCell) else { return }
+                
+                let detailViewController = ProductDetailViewController()
+                detailViewController.id = cell.id
+                
+                self?.present(detailViewController, animated: false, completion: nil)
+            }
+            .disposed(by: disposeBag)
     }
     
     func bindModelToView(_ viewModel: IndexViewBindable) {
