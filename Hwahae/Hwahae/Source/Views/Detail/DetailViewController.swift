@@ -13,10 +13,13 @@ import KRWordWrapLabel
 
 typealias DetailData = (id: Int, full_size_image: String, title: String, description: String, price: String)
 
-protocol ProductDetailBindable {
+protocol DetailBindable {
+    var viewWillAppear: PublishRelay<Int> { get }
+    var productDetailData: Signal<DetailData> { get }
+    var errorMessage: Signal<String> { get }
 }
 
-class ProductDetailViewController: ViewController<ProductDetailBindable> {
+class DetailViewController: ViewController<DetailBindable> {
     let scrollView = UIScrollView()
     let fullImageView = UIImageView()
     let closeButton = UIButton()
@@ -27,15 +30,45 @@ class ProductDetailViewController: ViewController<ProductDetailBindable> {
     let noticeView = UIView()
     let buyButton = UIButton()
     
+    private typealias UI = Constants.UI.Detail
+    private typealias TEXT = Constants.Text.Detail
+    
     var id: Int? = 0
     
-    override func bind(_ viewModel: ProductDetailBindable) {
+    override func viewDidLoad() {
+        attribute()
+    }
+    
+    override func bind(_ viewModel: DetailBindable) {
         self.disposeBag = DisposeBag()
-        
+
+        self.rx.viewWillAppear
+            .take(1)
+            .map { [weak self] _ in self?.id }
+            .filterNil()
+            .bind(to: viewModel.viewWillAppear)
+            .disposed(by: disposeBag)
+
+        viewModel.productDetailData
+            .emit(to: self.rx.setData)
+            .disposed(by: disposeBag)
+
+        viewModel.errorMessage
+            .emit(to: self.rx.toast())
+            .disposed(by: disposeBag)
+
         closeButton.rx.controlEvent(.touchUpInside)
             .subscribe(onNext: { [weak self] _ in
                 self?.dismiss(animated: true, completion: nil)
             })
+            .disposed(by: disposeBag)
+        
+        let detailData = viewModel.productDetailData.asObservable().share()
+        detailData
+            .subscribeOn(MainScheduler.instance)
+            .subscribe { [weak self] _ in
+                self?.layout()
+            }
             .disposed(by: disposeBag)
     }
     
@@ -47,44 +80,43 @@ class ProductDetailViewController: ViewController<ProductDetailBindable> {
             $0.showsVerticalScrollIndicator = false
         }
         
-        fullImageView.do {
-            $0.layer.cornerRadius = 14
-            $0.layer.masksToBounds = true
-        }
-        
         closeButton.do {
-            $0.backgroundColor = UIColor(displayP3Red: (24/255), green: (24/255), blue: (40/255), alpha: 0.16)
-            $0.layer.cornerRadius = 20
+            $0.backgroundColor = UI.closeBtnColor
+            $0.layer.cornerRadius = UI.closeBtnRadius
             $0.setImage(UIImage(named: "round_close_white.png"), for: .normal)
         }
         
         titleLabel.do {
-            $0.font = .systemFont(ofSize: 40, weight: .bold)
-            $0.textColor = UIColor(displayP3Red: (20/255), green: (20/255), blue: (40/255), alpha: 1)
-            $0.lineBreakMode = .byWordWrapping
+            $0.font = UI.titleFont
+            $0.textColor = UI.titleTextColor
             $0.numberOfLines = 10
         }
         
+        priceLabel.do {
+            $0.font = UI.priceFont
+            $0.textColor = UI.priceTextColor
+        }
+        
         line.do {
-            $0.backgroundColor = UIColor(displayP3Red: (236/255), green: (236/255), blue: (245/255), alpha: 1)
-            $0.layer.cornerRadius = 15
+            $0.backgroundColor = UI.lineColor
+            $0.layer.cornerRadius = UI.lineRadius
         }
         
         descriptionLabel.do {
-            $0.font = .systemFont(ofSize: 16, weight: .bold)
-            $0.textColor = UIColor(displayP3Red: (20/255), green: (20/255), blue: (40/255), alpha: 1)
+            $0.font = UI.descriptionFont
+            $0.textColor = UI.descriptionTextColor
             $0.numberOfLines = 0
         }
         
         noticeView.do {
-            $0.backgroundColor = UIColor(displayP3Red: (246/255), green: (246/255), blue: (250/255), alpha: 1)
-            $0.layer.cornerRadius = 15
+            $0.backgroundColor = UI.noticeColor
+            $0.layer.cornerRadius = UI.noticeRadius
             let notice = UILabel()
             notice.do {
-                $0.font = .systemFont(ofSize: 14, weight: .bold)
-                $0.textColor = UIColor(displayP3Red: (163/255), green: (163/255), blue: (181/255), alpha: 1)
+                $0.font = UI.noticeFont
+                $0.textColor = UI.noticeTextColor
                 $0.numberOfLines = 0
-                $0.text = "부랑구마켓은 통신판매중개자이며 통신판매의 당사자가 아닙니다. 따라서 부랑구마켓은 상품 거래정보 및 거래에 대하여 책임을 지지 않습니다."
+                $0.text = TEXT.notice
             }
             noticeView.addSubview(notice)
             notice.snp.makeConstraints {
@@ -93,11 +125,11 @@ class ProductDetailViewController: ViewController<ProductDetailBindable> {
         }
         
         buyButton.do {
-            $0.backgroundColor = UIColor(displayP3Red: (255/255), green: (88/255), blue: (108/255), alpha: 1)
-            $0.layer.cornerRadius = 15
-            $0.setTitle("구매하기", for: .normal)
-            $0.titleLabel?.textColor = .white
-            $0.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
+            $0.backgroundColor = UI.buyBtnColor
+            $0.layer.cornerRadius = UI.buyBtnRadius
+            $0.setTitle(TEXT.buyBtnTitle, for: .normal)
+            $0.titleLabel?.textColor = UI.buyBtnTextColor
+            $0.titleLabel?.font = UI.buyBtnFont
         }
     }
     
@@ -122,49 +154,44 @@ class ProductDetailViewController: ViewController<ProductDetailBindable> {
         }
         
         closeButton.snp.makeConstraints {
-            $0.top.trailing.equalToSuperview().inset(16)
-            $0.width.height.equalTo(40)
-        }
-        
-        priceLabel.snp.makeConstraints {
-            $0.top.equalTo(fullImageView.snp.bottom).offset(30)
-            $0.leading.trailing.equalToSuperview().inset(26)
+            $0.top.trailing.equalToSuperview().inset(UI.closeBtnTopMargin)
+            $0.width.height.equalTo(UI.closeBtnHeight)
         }
         
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(priceLabel.snp.bottom).offset(16)
-            $0.leading.width.equalToSuperview().inset(26)
+            $0.top.equalTo(fullImageView.snp.bottom).offset(UI.titleTopMargin)
+            $0.leading.trailing.equalToSuperview().inset(UI.titleSideMargin)
         }
         
         priceLabel.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(32)
-            $0.leading.equalToSuperview().offset(10)
+            $0.top.equalTo(titleLabel.snp.bottom).offset(UI.priceTopMargin)
+            $0.leading.trailing.equalToSuperview().offset(UI.priceSideMargin)
         }
         
         line.snp.makeConstraints {
-            $0.top.equalTo(priceLabel.snp.bottom).offset(32)
-            $0.leading.trailing.equalToSuperview().inset(18)
-            $0.height.equalTo(1)
+            $0.top.equalTo(priceLabel.snp.bottom).offset(UI.lineTopMargin)
+            $0.leading.trailing.equalToSuperview().inset(UI.lineSideMargin)
+            $0.height.equalTo(UI.lineHeight)
         }
         
         descriptionLabel.snp.makeConstraints {
-            $0.top.equalTo(line.snp.bottom).offset(24)
-            $0.leading.trailing.equalToSuperview().inset(33)
+            $0.top.equalTo(line.snp.bottom).offset(UI.descriptiocnTopMargin)
+            $0.leading.trailing.equalToSuperview().inset(UI.descriptionSideMargin)
         }
         
         noticeView.snp.makeConstraints {
-            $0.top.equalTo(descriptionLabel.snp.bottom).offset(40)
-            $0.leading.trailing.equalToSuperview().inset(33)
+            $0.top.equalTo(descriptionLabel.snp.bottom).offset(UI.noticeTopMargin)
+            $0.leading.trailing.equalToSuperview().inset(UI.noticeSideMargin)
             $0.centerX.equalToSuperview()
-            $0.width.equalTo(327)
-            $0.height.equalTo(96)
-            $0.bottom.equalToSuperview().inset(80)
+            $0.width.equalTo(UI.noticeHeight)
+            $0.height.equalTo(UI.noticeTopMargin)
+            $0.bottom.equalToSuperview().inset(UI.buyBtnHeight + UI.buyBtnTopMargin)
         }
         
         buyButton.snp.makeConstraints {
-            $0.bottom.equalToSuperview().inset(-52)
-            $0.leading.trailing.equalToSuperview().inset(33)
-            $0.height.equalTo(52)
+            $0.bottom.equalToSuperview().offset(UI.buyBtnHeight)
+            $0.leading.trailing.equalToSuperview().inset(UI.buyBtnSideMargin)
+            $0.height.equalTo(UI.buyBtnHeight)
         }
     }
 
@@ -172,5 +199,16 @@ class ProductDetailViewController: ViewController<ProductDetailBindable> {
         #if debug
         print("ProductDetailViewController 메모리 완전해제")
         #endif
+    }
+}
+
+extension Reactive where Base: DetailViewController {
+    var setData: Binder<DetailData> {
+        return Binder(base) { base, data in
+            base.fullImageView.kf.setImage(with: URL(string: data.full_size_image), placeholder: UIImage(named: "placeholder"))
+            base.titleLabel.text = data.title
+            base.descriptionLabel.text = data.description.replacingOccurrences(of: "\\n", with: "\n", options: NSString.CompareOptions.literal, range: nil)
+            base.priceLabel.text = data.price
+        }
     }
 }

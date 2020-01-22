@@ -52,16 +52,16 @@ class ProductsNetworkImpl: ProductsNetwork {
             }
     }
 
-    func getProduct(id: Int) -> Observable<Result<[Product], ProductsNetworkError>> {
+    func getProduct(id: Int) -> Observable<Result<Product, ProductsNetworkError>> {
         guard let url = makeGetProductComponents(id: id).url else {
             let error = ProductsNetworkError.error("유효하지 않은 URL입니다.")
             return .just(.failure(error))
         }
-
         return session.rx.data(request: URLRequest(url: url, timeoutInterval: timeoutInterval))
             .map { data in
                 do {
-                    let response = try JSONDecoder().decode(ProductResponse<[Product]>.self, from: data)
+                    let response = try JSONDecoder().decode(ProductResponse<Product>.self, from: data)
+                    print("\(response)")
                     return .success(response.body)
                 } catch {
                     return .failure(.error("getProduct API 에러"))

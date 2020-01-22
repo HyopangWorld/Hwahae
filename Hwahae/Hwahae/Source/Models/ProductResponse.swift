@@ -11,5 +11,5 @@ import Foundation
 struct ProductResponse<T: Codable>: Codable {
     let statusCode: Int
     let body: T
-    let scanned_count: Int
+    let scanned_count: Int?
 }

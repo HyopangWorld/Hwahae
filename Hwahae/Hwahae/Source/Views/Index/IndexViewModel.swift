@@ -21,7 +21,7 @@ struct IndexViewModel: IndexViewBindable {
     let reloadList: Signal<Void>
     let errorMessage: Signal<String>
     
-    init(model: ProductListModel = ProductListModel()){
+    init(model: IndexModel = IndexModel()){
         let productListResult = Observable.merge(viewWillFetch.asObservable(), viewWillReload.asObservable())
             .flatMap(model.getSkinTypeProductList)
             .asObservable()

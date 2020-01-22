@@ -9,7 +9,7 @@
 import Foundation
 import RxSwift
 
-struct ProductListModel {
+struct IndexModel {
     private let productsNetwork: ProductsNetwork
     
     init(productsNetwork: ProductsNetwork = ProductsNetworkImpl()) {

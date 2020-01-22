@@ -10,11 +10,11 @@ import Foundation
 
 struct Product: Codable {
     let id, oily_score, dry_score, sensitive_score: Int?
-    let thumbnail_image, title, price, full_size_image: String?
+    let thumbnail_image, title, price, full_size_image, description: String?
 
     enum CodingKeys: String, CodingKey {
         case id, oily_score, dry_score, sensitive_score
-        case thumbnail_image, title, price, full_size_image
+        case thumbnail_image, title, price, full_size_image, description
     }
 
     init(from decoder: Decoder) throws {
@@ -28,5 +28,6 @@ struct Product: Codable {
         self.dry_score = try? values.decode(Int.self, forKey: .dry_score)
         self.sensitive_score = try? values.decode(Int.self, forKey: .sensitive_score)
         self.full_size_image = try? values.decode(String.self, forKey: .full_size_image)
+        self.description = try? values.decode(String.self, forKey: .description)
     }
 }

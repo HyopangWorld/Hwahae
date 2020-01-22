@@ -67,8 +67,10 @@ class IndexViewController: ViewController<IndexViewBindable> {
                 guard let indexpath = event.element else { return }
                 guard let cell = (self?.collectionView.cellForItem(at: indexpath) as? ProductListCell) else { return }
                 
-                let detailViewController = ProductDetailViewController()
+                let detailViewController = DetailViewController()
+                let detailViewModel = DetailViewModel()
                 detailViewController.id = cell.id
+                detailViewController.bind(detailViewModel)
                 
                 self?.present(detailViewController, animated: false, completion: nil)
             }
