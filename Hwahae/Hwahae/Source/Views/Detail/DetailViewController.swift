@@ -20,6 +20,7 @@ protocol DetailBindable {
 }
 
 class DetailViewController: ViewController<DetailBindable> {
+    let backgroundView = UIWindow()
     let scrollView = UIScrollView()
     let fullImageView = UIImageView()
     let closeButton = UIButton()
@@ -35,61 +36,73 @@ class DetailViewController: ViewController<DetailBindable> {
     
     var id: Int? = 0
     
-    override func viewDidLoad() {
-        attribute()
-    }
-    
     override func bind(_ viewModel: DetailBindable) {
         self.disposeBag = DisposeBag()
-
+        
         self.rx.viewWillAppear
             .take(1)
             .map { [weak self] _ in self?.id }
             .filterNil()
             .bind(to: viewModel.viewWillAppear)
             .disposed(by: disposeBag)
-
+        
         viewModel.productDetailData
             .emit(to: self.rx.setData)
             .disposed(by: disposeBag)
-
+        
         viewModel.errorMessage
             .emit(to: self.rx.toast())
             .disposed(by: disposeBag)
-
+        
         closeButton.rx.controlEvent(.touchUpInside)
             .subscribe(onNext: { [weak self] _ in
                 self?.dismiss(animated: true, completion: nil)
             })
             .disposed(by: disposeBag)
         
-        let detailData = viewModel.productDetailData.asObservable().share()
-        detailData
+        viewModel.productDetailData.asObservable()
+            .delay(RxTimeInterval.milliseconds(1500), scheduler: MainScheduler.instance)
             .subscribeOn(MainScheduler.instance)
-            .subscribe { [weak self] _ in
-                self?.layout()
-            }
+            .subscribe(onNext: { [weak self] _ in
+                guard let _self = self else { return }
+                UIView.animate(withDuration: 0.4, animations: {
+                    _self.buyButton.frame = _self.buyButton.frame.offsetBy(dx: 0, dy: -(UI.buyBtnHeight + UI.buyBtnBottomMargin + 3))
+                }, completion: { (_) in
+                    UIView.animate(withDuration: 0.1, animations: {
+                        _self.buyButton.frame = _self.buyButton.frame.offsetBy(dx: 0, dy: 3)
+                    })
+                })
+            })
             .disposed(by: disposeBag)
     }
     
     override func attribute() {
-        view.backgroundColor = .black
+        view.backgroundColor = UIColor.clear
+        
+        backgroundView.do {
+            $0.frame = self.view.window?.bounds ?? self.view.bounds
+            $0.backgroundColor = UIColor.init(displayP3Red: 0, green: 0, blue: 0, alpha: 0.6)
+            $0.windowLevel = (UIWindow.Level.statusBar + 1)
+            $0.makeKeyAndVisible()
+        }
         
         scrollView.do {
             $0.backgroundColor = .white
+            $0.layer.cornerRadius = 20
             $0.showsVerticalScrollIndicator = false
         }
         
         closeButton.do {
             $0.backgroundColor = UI.closeBtnColor
             $0.layer.cornerRadius = UI.closeBtnRadius
+            $0.tintColor = .white
             $0.setImage(UIImage(named: "round_close_white.png"), for: .normal)
         }
         
         titleLabel.do {
             $0.font = UI.titleFont
             $0.textColor = UI.titleTextColor
-            $0.numberOfLines = 10
+            $0.numberOfLines = 0
         }
         
         priceLabel.do {
@@ -115,7 +128,7 @@ class DetailViewController: ViewController<DetailBindable> {
             notice.do {
                 $0.font = UI.noticeFont
                 $0.textColor = UI.noticeTextColor
-                $0.numberOfLines = 0
+                $0.numberOfLines = 10
                 $0.text = TEXT.notice
             }
             noticeView.addSubview(notice)
@@ -140,12 +153,13 @@ class DetailViewController: ViewController<DetailBindable> {
         scrollView.addSubview(line)
         scrollView.addSubview(descriptionLabel)
         scrollView.addSubview(noticeView)
-        view.addSubview(scrollView)
-        view.addSubview(closeButton)
-        view.addSubview(buyButton)
+        backgroundView.addSubview(scrollView)
+        backgroundView.addSubview(closeButton)
+        backgroundView.addSubview(buyButton)
         
         scrollView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.equalToSuperview().inset(Constants.UI.Base.safeAreaInsetsTop + 14)
+            $0.trailing.leading.bottom.equalToSuperview()
         }
         
         fullImageView.snp.makeConstraints {
@@ -154,7 +168,8 @@ class DetailViewController: ViewController<DetailBindable> {
         }
         
         closeButton.snp.makeConstraints {
-            $0.top.trailing.equalToSuperview().inset(UI.closeBtnTopMargin)
+            $0.top.equalTo(scrollView.snp.top).inset(UI.closeBtnMargin)
+            $0.trailing.equalToSuperview().inset(UI.closeBtnMargin)
             $0.width.height.equalTo(UI.closeBtnHeight)
         }
         
@@ -183,9 +198,9 @@ class DetailViewController: ViewController<DetailBindable> {
             $0.top.equalTo(descriptionLabel.snp.bottom).offset(UI.noticeTopMargin)
             $0.leading.trailing.equalToSuperview().inset(UI.noticeSideMargin)
             $0.centerX.equalToSuperview()
-            $0.width.equalTo(UI.noticeHeight)
-            $0.height.equalTo(UI.noticeTopMargin)
-            $0.bottom.equalToSuperview().inset(UI.buyBtnHeight + UI.buyBtnTopMargin)
+            $0.width.equalTo(UI.noticeWidth)
+            $0.height.equalTo(UI.noticeHeight)
+            $0.bottom.equalToSuperview().inset(UI.buyBtnHeight + UI.buyBtnTopMargin + (Constants.UI.Base.isEdge ? 40 : 0))
         }
         
         buyButton.snp.makeConstraints {
@@ -193,12 +208,6 @@ class DetailViewController: ViewController<DetailBindable> {
             $0.leading.trailing.equalToSuperview().inset(UI.buyBtnSideMargin)
             $0.height.equalTo(UI.buyBtnHeight)
         }
-    }
-
-    deinit {
-        #if debug
-        print("ProductDetailViewController 메모리 완전해제")
-        #endif
     }
 }
 

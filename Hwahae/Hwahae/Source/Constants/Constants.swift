@@ -15,7 +15,7 @@ struct Constants {
             static let backgroundColor: UIColor = .white
             static let fontSize: CGFloat = 16
             static let safeAreaInsetsTop = (UIApplication.shared.windows.first { $0.isKeyWindow })?.safeAreaInsets.top ?? 0
-            static let isEdge: Bool = (safeAreaInsetsTop == 20)
+            static let isEdge: Bool = (safeAreaInsetsTop != 40)
             static let textBlack: UIColor = UIColor(displayP3Red: (20/255), green: (20/255), blue: (40/255), alpha: 1)
         }
 
@@ -63,7 +63,7 @@ struct Constants {
         struct Detail {
             static let closeBtnColor: UIColor = UIColor(displayP3Red: (24/255), green: (24/255), blue: (40/255), alpha: 0.16)
             static let closeBtnRadius: CGFloat = 20
-            static let closeBtnTopMargin: CGFloat = 16
+            static let closeBtnMargin: CGFloat = 16
             static let closeBtnHeight: CGFloat = 40
             
             static let titleFont: UIFont = .systemFont(ofSize: 32, weight: .bold)
@@ -101,7 +101,8 @@ struct Constants {
             static let buyBtnTextColor: UIColor = .white
             static let buyBtnFont: UIFont = .systemFont(ofSize: 18, weight: .bold)
             static let buyBtnSideMargin: CGFloat = 24
-            static let buyBtnTopMargin: CGFloat = 30
+            static let buyBtnTopMargin: CGFloat = 40
+            static let buyBtnBottomMargin: CGFloat = 30
             static let buyBtnHeight: CGFloat = 52
         }
     }

@@ -61,7 +61,6 @@ class ProductsNetworkImpl: ProductsNetwork {
             .map { data in
                 do {
                     let response = try JSONDecoder().decode(ProductResponse<Product>.self, from: data)
-                    print("\(response)")
                     return .success(response.body)
                 } catch {
                     return .failure(.error("getProduct API 에러"))

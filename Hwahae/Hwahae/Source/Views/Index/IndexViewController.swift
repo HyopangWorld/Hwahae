@@ -72,7 +72,8 @@ class IndexViewController: ViewController<IndexViewBindable> {
                 detailViewController.id = cell.id
                 detailViewController.bind(detailViewModel)
                 
-                self?.present(detailViewController, animated: false, completion: nil)
+                detailViewController.modalPresentationStyle = .overFullScreen
+                self?.present(detailViewController, animated: true, completion: nil)
             }
             .disposed(by: disposeBag)
     }
@@ -255,11 +256,5 @@ class IndexViewController: ViewController<IndexViewBindable> {
             $0.centerX.equalToSuperview()
             $0.width.height.equalTo(UI.indicatorHieght)
         }
-    }
-    
-    deinit {
-        #if debug
-        print("\(self) 메모리 해제")
-        #endif
     }
 }
