@@ -61,6 +61,10 @@ struct Constants {
         }
         
         struct Detail {
+            static let bgColor: UIColor = UIColor.init(displayP3Red: 0, green: 0, blue: 0, alpha: 0.6)
+            static let scrollRadius: CGFloat = 20
+            static let scrollTopMargin: CGFloat = Base.safeAreaInsetsTop + 14
+            
             static let closeBtnColor: UIColor = UIColor(displayP3Red: (24/255), green: (24/255), blue: (40/255), alpha: 0.16)
             static let closeBtnRadius: CGFloat = 20
             static let closeBtnMargin: CGFloat = 16
@@ -95,6 +99,7 @@ struct Constants {
             static let noticeSideMargin: CGFloat = 24
             static let noticeWidth: CGFloat = 327
             static let noticeHeight: CGFloat = 96
+            static let noticeInset: CGFloat = 20
             
             static let buyBtnColor: UIColor = UIColor(displayP3Red: (144/255), green: (19/255), blue: (254/255), alpha: 1)
             static let buyBtnRadius: CGFloat = 15
@@ -129,6 +134,11 @@ struct Constants {
         struct Index {
             static let listCount: Int = 20
             static let lastCells: Int = 5
+        }
+        
+        struct Detail {
+            static let btnAniDelay: Int = 1500
+            static let rebound: CGFloat = 3
         }
     }
 }

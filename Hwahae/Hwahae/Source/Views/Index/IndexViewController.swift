@@ -73,6 +73,7 @@ class IndexViewController: ViewController<IndexViewBindable> {
                 detailViewController.bind(detailViewModel)
                 
                 detailViewController.modalPresentationStyle = .overFullScreen
+                detailViewController.modalTransitionStyle = .coverVertical
                 self?.present(detailViewController, animated: true, completion: nil)
             }
             .disposed(by: disposeBag)

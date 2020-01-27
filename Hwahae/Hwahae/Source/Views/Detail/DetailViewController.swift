@@ -20,7 +20,6 @@ protocol DetailBindable {
 }
 
 class DetailViewController: ViewController<DetailBindable> {
-    let backgroundView = UIWindow()
     let scrollView = UIScrollView()
     let fullImageView = UIImageView()
     let closeButton = UIButton()
@@ -33,6 +32,7 @@ class DetailViewController: ViewController<DetailBindable> {
     
     private typealias UI = Constants.UI.Detail
     private typealias TEXT = Constants.Text.Detail
+    private typealias NUM = Constants.Number.Detail
     
     var id: Int? = 0
     
@@ -61,15 +61,15 @@ class DetailViewController: ViewController<DetailBindable> {
             .disposed(by: disposeBag)
         
         viewModel.productDetailData.asObservable()
-            .delay(RxTimeInterval.milliseconds(1500), scheduler: MainScheduler.instance)
+            .delay(RxTimeInterval.milliseconds(NUM.btnAniDelay), scheduler: MainScheduler.instance)
             .subscribeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] _ in
                 guard let _self = self else { return }
                 UIView.animate(withDuration: 0.4, animations: {
-                    _self.buyButton.frame = _self.buyButton.frame.offsetBy(dx: 0, dy: -(UI.buyBtnHeight + UI.buyBtnBottomMargin + 3))
+                    _self.buyButton.frame = _self.buyButton.frame.offsetBy(dx: 0, dy: -(UI.buyBtnHeight + UI.buyBtnBottomMargin + NUM.rebound))
                 }, completion: { (_) in
                     UIView.animate(withDuration: 0.1, animations: {
-                        _self.buyButton.frame = _self.buyButton.frame.offsetBy(dx: 0, dy: 3)
+                        _self.buyButton.frame = _self.buyButton.frame.offsetBy(dx: 0, dy: NUM.rebound)
                     })
                 })
             })
@@ -77,18 +77,11 @@ class DetailViewController: ViewController<DetailBindable> {
     }
     
     override func attribute() {
-        view.backgroundColor = UIColor.clear
-        
-        backgroundView.do {
-            $0.frame = self.view.window?.bounds ?? self.view.bounds
-            $0.backgroundColor = UIColor.init(displayP3Red: 0, green: 0, blue: 0, alpha: 0.6)
-            $0.windowLevel = (UIWindow.Level.statusBar + 1)
-            $0.makeKeyAndVisible()
-        }
+        view.backgroundColor = UI.bgColor
         
         scrollView.do {
             $0.backgroundColor = .white
-            $0.layer.cornerRadius = 20
+            $0.layer.cornerRadius = UI.scrollRadius
             $0.showsVerticalScrollIndicator = false
         }
         
@@ -133,7 +126,7 @@ class DetailViewController: ViewController<DetailBindable> {
             }
             noticeView.addSubview(notice)
             notice.snp.makeConstraints {
-                $0.edges.equalToSuperview().inset(20)
+                $0.edges.equalToSuperview().inset(UI.noticeInset)
             }
         }
         
@@ -153,12 +146,12 @@ class DetailViewController: ViewController<DetailBindable> {
         scrollView.addSubview(line)
         scrollView.addSubview(descriptionLabel)
         scrollView.addSubview(noticeView)
-        backgroundView.addSubview(scrollView)
-        backgroundView.addSubview(closeButton)
-        backgroundView.addSubview(buyButton)
+        view.addSubview(scrollView)
+        view.addSubview(closeButton)
+        view.addSubview(buyButton)
         
         scrollView.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(Constants.UI.Base.safeAreaInsetsTop + 14)
+            $0.top.equalToSuperview().inset(UI.scrollTopMargin)
             $0.trailing.leading.bottom.equalToSuperview()
         }
         
@@ -200,7 +193,7 @@ class DetailViewController: ViewController<DetailBindable> {
             $0.centerX.equalToSuperview()
             $0.width.equalTo(UI.noticeWidth)
             $0.height.equalTo(UI.noticeHeight)
-            $0.bottom.equalToSuperview().inset(UI.buyBtnHeight + UI.buyBtnTopMargin + (Constants.UI.Base.isEdge ? 40 : 0))
+            $0.bottom.equalToSuperview().inset(UI.buyBtnHeight + UI.buyBtnTopMargin)
         }
         
         buyButton.snp.makeConstraints {
