@@ -80,7 +80,7 @@
 		DD31287123C84C3400B85B46 /* Reactive+UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Reactive+UIViewController.swift"; sourceTree = "<group>"; };
 		DD31287323C84E3600B85B46 /* String+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Utils.swift"; sourceTree = "<group>"; };
 		DD31287923C85EC000B85B46 /* ProductListHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListHeader.swift; sourceTree = "<group>"; };
-		DD6C808B23C2C29C004AD177 /* Hwahae.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hwahae.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD6C808B23C2C29C004AD177 /* 화해.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "화해.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD6C808E23C2C29C004AD177 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DD6C809223C2C29C004AD177 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		DD6C809723C2C29D004AD177 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -229,7 +229,7 @@
 		DD6C808C23C2C29C004AD177 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DD6C808B23C2C29C004AD177 /* Hwahae.app */,
+				DD6C808B23C2C29C004AD177 /* 화해.app */,
 				DD6C80A123C2C29E004AD177 /* HwahaeTests.xctest */,
 				DD6C80AC23C2C29E004AD177 /* HwahaeUITests.xctest */,
 			);
@@ -355,7 +355,7 @@
 			);
 			name = Hwahae;
 			productName = Hwahae;
-			productReference = DD6C808B23C2C29C004AD177 /* Hwahae.app */;
+			productReference = DD6C808B23C2C29C004AD177 /* 화해.app */;
 			productType = "com.apple.product-type.application";
 		};
 		DD6C80A023C2C29E004AD177 /* HwahaeTests */ = {
@@ -792,7 +792,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D debug";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hyopangworld.Hwahae;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "화해";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -812,7 +812,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.hyopangworld.Hwahae;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "화해";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

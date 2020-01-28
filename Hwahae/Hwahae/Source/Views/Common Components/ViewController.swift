@@ -58,7 +58,6 @@ class ViewController<ViewBindable>: UIViewController {
      `UIViewController`의 다양한 프로퍼티의 속성을 정의
      
      - 컴포넌트들의 속성을 정의하는 동작을 수행
-     - `Then`의 `do`라는 함수를 통해 각 컴포넌트들의 속성을 그룹핑
      */
     func attribute() {}
 
