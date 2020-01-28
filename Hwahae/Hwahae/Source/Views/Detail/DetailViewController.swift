@@ -39,6 +39,12 @@ class DetailViewController: ViewController<DetailBindable> {
     override func bind(_ viewModel: DetailBindable) {
         self.disposeBag = DisposeBag()
         
+        closeButton.rx.controlEvent(.touchUpInside)
+            .subscribe(onNext: { [weak self] _ in
+                self?.dismiss(animated: true, completion: nil)
+            })
+            .disposed(by: disposeBag)
+        
         self.rx.viewWillAppear
             .take(1)
             .map { [weak self] _ in self?.id }
@@ -51,13 +57,7 @@ class DetailViewController: ViewController<DetailBindable> {
             .disposed(by: disposeBag)
         
         viewModel.errorMessage
-            .emit(to: self.rx.toast())
-            .disposed(by: disposeBag)
-        
-        closeButton.rx.controlEvent(.touchUpInside)
-            .subscribe(onNext: { [weak self] _ in
-                self?.dismiss(animated: true, completion: nil)
-            })
+            .emit(to: self.rx.alert())
             .disposed(by: disposeBag)
         
         viewModel.productDetailData.asObservable()

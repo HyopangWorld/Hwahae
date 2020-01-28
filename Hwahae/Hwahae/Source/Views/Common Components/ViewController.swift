@@ -16,6 +16,7 @@ import RxSwift
 
 class ViewController<ViewBindable>: UIViewController {
     var disposeBag = DisposeBag()
+    let indicator = UIActivityIndicatorView()
 
     init() {
         super.init(nibName: nil, bundle: nil)

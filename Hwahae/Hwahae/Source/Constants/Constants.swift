@@ -137,7 +137,7 @@ struct Constants {
         }
         
         struct Detail {
-            static let btnAniDelay: Int = 1500
+            static let btnAniDelay: Int = 1000
             static let rebound: CGFloat = 3
         }
     }

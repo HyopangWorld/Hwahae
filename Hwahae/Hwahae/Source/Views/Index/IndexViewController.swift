@@ -13,6 +13,7 @@ import RxDataSources
 import RxSwiftExt
 import Then
 import SnapKit
+import Toaster
 
 protocol IndexViewBindable {
     var viewWillFetch: PublishRelay<(Int, SkinType)> { get }
@@ -28,7 +29,6 @@ class IndexViewController: ViewController<IndexViewBindable> {
     let collectionLayout = UICollectionViewFlowLayout()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     let fetchIndicator = Indicator(image: UIImage(named: "outline_explore_black.png"))
-    let reloadIndicator = UIActivityIndicatorView()
     let header = ProductListHeader()
     
     private typealias UI = Constants.UI.Index
@@ -50,7 +50,6 @@ class IndexViewController: ViewController<IndexViewBindable> {
             .subscribe { [weak self] event in
                 guard let prev = event.element?.0.y, let new = event.element?.1.y else { return }
                 let y = (self?.searchController.searchBar.frame.height ?? 0) + Constants.UI.Base.safeAreaInsetsTop
-                
                 if new >= Constants.UI.IndexCell.height + Constants.UI.Index.headerHieght {
                     self?.header.frame = CGRect(x: 0, y: y - (self?.header.frame.height ?? 0), width: self?.header.frame.width ?? 0, height: self?.header.frame.height ?? 0)
                 } else if new <= Constants.UI.IndexCell.height {
@@ -74,7 +73,7 @@ class IndexViewController: ViewController<IndexViewBindable> {
                 
                 detailViewController.modalPresentationStyle = .overFullScreen
                 detailViewController.modalTransitionStyle = .coverVertical
-                self?.present(detailViewController, animated: true, completion: nil)
+                self?.presentViewController(detailViewController, animation: true, completion: nil)
             }
             .disposed(by: disposeBag)
     }
@@ -91,15 +90,17 @@ class IndexViewController: ViewController<IndexViewBindable> {
         
         viewModel.reloadList
             .emit(onNext: { [weak self] _ in
-                self?.fetchIndicator.snp.updateConstraints { $0.bottom.equalToSuperview().offset((self?.collectionView.collectionViewLayout.collectionViewContentSize.height ?? 0) - UI.indicatorTopMargin)
+                self?.fetchIndicator.snp.updateConstraints {
+                    $0.bottom.equalToSuperview().offset((self?.collectionView.collectionViewLayout.collectionViewContentSize.height ?? 0) - UI.indicatorTopMargin)
                 }
-                self?.reloadIndicator.isHidden = true
+                self?.indicator.stopAnimating()
+                self?.indicator.isHidden = true
                 self?.collectionView.reloadData()
             })
             .disposed(by: disposeBag)
         
         viewModel.errorMessage
-            .emit(to: self.rx.toast())
+            .emit(to: self.rx.alert())
             .disposed(by: disposeBag)
 
         viewModel.viewWillSearch.asObservable()
@@ -107,8 +108,8 @@ class IndexViewController: ViewController<IndexViewBindable> {
             .subscribe { [weak self] _ in
                 self?.header.isHidden = true
                 self?.fetchIndicator.isHidden = true
-                self?.reloadIndicator.isHidden = false
-                self?.reloadIndicator.startAnimating()
+                self?.indicator.isHidden = false
+                self?.indicator.startAnimating()
             }
             .disposed(by: disposeBag)
 
@@ -117,8 +118,8 @@ class IndexViewController: ViewController<IndexViewBindable> {
             .subscribe { [weak self] _ in
                 self?.header.isHidden = false
                 self?.fetchIndicator.isHidden = false
-                self?.reloadIndicator.isHidden = false
-                self?.reloadIndicator.startAnimating()
+                self?.indicator.isHidden = false
+                self?.indicator.startAnimating()
             }
             .disposed(by: disposeBag)
     }
@@ -144,7 +145,7 @@ class IndexViewController: ViewController<IndexViewBindable> {
         let collectionFetch = collectionView.rx.contentOffset
             .skipUntil(viewModel.reloadList.asObservable())
             .filter { [weak self] offset -> Bool in
-                let height = (self?.collectionView.collectionViewLayout.collectionViewContentSize.height ?? 0) - (self?.collectionView.frame.height ?? 0) + (Constants.UI.Base.isEdge ? 0 : Constants.UI.Base.safeAreaInsetsTop) // edge가 없으면 0으로 값을 잡는다.
+                let height = (self?.collectionView.collectionViewLayout.collectionViewContentSize.height ?? 0) - (self?.collectionView.frame.height ?? 0) + (Constants.UI.Base.isEdge ? Constants.UI.Base.safeAreaInsetsTop : 0) // edge가 없으면 0으로 값을 잡는다.
                 return Int(offset.y - height) == 0
             }
             .map { Int($0.y) }
@@ -231,7 +232,7 @@ class IndexViewController: ViewController<IndexViewBindable> {
         collectionView.addSubview(fetchIndicator)
         view.addSubview(collectionView)
         view.addSubview(header)
-        view.addSubview(reloadIndicator)
+        view.addSubview(indicator)
         
         let collectionHeight = searchController.searchBar.frame.height + Constants.UI.Base.safeAreaInsetsTop
         header.snp.makeConstraints {
@@ -240,7 +241,7 @@ class IndexViewController: ViewController<IndexViewBindable> {
             $0.height.equalTo(UI.headerHieght)
         }
         
-        reloadIndicator.snp.makeConstraints {
+        indicator.snp.makeConstraints {
             $0.centerX.centerY.equalToSuperview()
             $0.width.height.equalTo(UI.indicatorHieght)
         }

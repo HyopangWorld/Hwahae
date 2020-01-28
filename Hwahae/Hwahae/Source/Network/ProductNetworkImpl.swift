@@ -30,7 +30,10 @@ class ProductsNetworkImpl: ProductsNetwork {
                     let response = try JSONDecoder().decode(ProductResponse<[Product]>.self, from: data)
                     return .success(response.body)
                 } catch {
-                    return .failure(.error("getSkinTypeProducts API 에러"))
+                    guard let response = try? JSONDecoder().decode(ProductResponse<String>.self, from: data) else {
+                        return .failure(.error("getSkinTypeProducts API 에러"))
+                    }
+                    return .failure(.error(response.body))
                 }
             }
     }
@@ -47,7 +50,10 @@ class ProductsNetworkImpl: ProductsNetwork {
                     let response = try JSONDecoder().decode(ProductResponse<[Product]>.self, from: data)
                     return .success(response.body)
                 } catch {
-                    return .failure(.error("getSearchProducts API 에러"))
+                    guard let response = try? JSONDecoder().decode(ProductResponse<String>.self, from: data) else {
+                        return .failure(.error("getSearchProducts API 에러"))
+                    }
+                    return .failure(.error(response.body))
                 }
             }
     }
@@ -63,7 +69,10 @@ class ProductsNetworkImpl: ProductsNetwork {
                     let response = try JSONDecoder().decode(ProductResponse<Product>.self, from: data)
                     return .success(response.body)
                 } catch {
-                    return .failure(.error("getProduct API 에러"))
+                    guard let response = try? JSONDecoder().decode(ProductResponse<String>.self, from: data) else {
+                        return .failure(.error("getProduct API 에러"))
+                    }
+                    return .failure(.error(response.body))
                 }
             }
     }

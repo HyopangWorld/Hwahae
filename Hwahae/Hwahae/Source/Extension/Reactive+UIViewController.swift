@@ -11,9 +11,12 @@ import RxCocoa
 import Toaster
 
 extension Reactive where Base: UIViewController {
-    func toast(delay: TimeInterval = 0, duration: TimeInterval = 0.8) -> Binder<String> {
-        return Binder(base) { _, text in
-            Toast(text: text, delay: delay, duration: duration).show()
+    func alert() -> Binder<String> {
+        return Binder(base) { base, message in
+            let alert = UIAlertController(title: nil, message: message, preferredStyle: UIAlertController.Style.alert)
+            let okAction = UIAlertAction(title: "확인".localizedCapitalized, style: .destructive, handler: nil)
+            alert.addAction(okAction)
+            base.presentViewController(alert, animation: true, completion: nil)
         }
     }
 }
