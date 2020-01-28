@@ -18,6 +18,7 @@ class ProductListHeader: UIView {
     let skinTypeLabel = UILabel()
     let arrowImageView = UIImageView()
     let skinTypeButton = UIView()
+    let shadowLine = CAGradientLayer()
     let skinTypeActionSheet = UIAlertController(title: TEXT.title, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
     var viewController: UIViewController? = UIViewController()
     
@@ -60,6 +61,12 @@ class ProductListHeader: UIView {
     
     func attribute() {
         self.backgroundColor = .white
+        
+        self.layer.do {
+            $0.masksToBounds = false
+            $0.shadowOffset = CGSize(width: 0, height: 1)
+            $0.shadowOpacity = 0.1
+        }
         
         skinTypeLabel.do {
             $0.text = SkinType.oily.getSkinTypeName()

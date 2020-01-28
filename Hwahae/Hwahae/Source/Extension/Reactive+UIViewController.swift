@@ -8,7 +8,6 @@
 
 import RxSwift
 import RxCocoa
-import Toaster
 
 extension Reactive where Base: UIViewController {
     func alert() -> Binder<String> {

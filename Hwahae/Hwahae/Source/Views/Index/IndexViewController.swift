@@ -13,7 +13,6 @@ import RxDataSources
 import RxSwiftExt
 import Then
 import SnapKit
-import Toaster
 
 protocol IndexViewBindable {
     var viewWillFetch: PublishRelay<(Int, SkinType)> { get }
@@ -50,6 +49,7 @@ class IndexViewController: ViewController<IndexViewBindable> {
             .subscribe { [weak self] event in
                 guard let prev = event.element?.0.y, let new = event.element?.1.y else { return }
                 let y = (self?.searchController.searchBar.frame.height ?? 0) + Constants.UI.Base.safeAreaInsetsTop
+                
                 if new >= Constants.UI.IndexCell.height + Constants.UI.Index.headerHieght {
                     self?.header.frame = CGRect(x: 0, y: y - (self?.header.frame.height ?? 0), width: self?.header.frame.width ?? 0, height: self?.header.frame.height ?? 0)
                 } else if new <= Constants.UI.IndexCell.height {
