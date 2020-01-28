@@ -145,7 +145,7 @@ class IndexViewController: ViewController<IndexViewBindable> {
         let collectionFetch = collectionView.rx.contentOffset
             .skipUntil(viewModel.reloadList.asObservable())
             .filter { [weak self] offset -> Bool in
-                let height = (self?.collectionView.collectionViewLayout.collectionViewContentSize.height ?? 0) - (self?.collectionView.frame.height ?? 0) + (Constants.UI.Base.isEdge ? Constants.UI.Base.safeAreaInsetsTop : 0) // edge가 없으면 0으로 값을 잡는다.
+                let height = (self?.collectionView.collectionViewLayout.collectionViewContentSize.height ?? 0) - (self?.collectionView.frame.height ?? 0) + Constants.UI.Base.safeAreaInsetsTop // edge가 없으면 0으로 값을 잡는다.
                 return Int(offset.y - height) == 0
             }
             .map { Int($0.y) }

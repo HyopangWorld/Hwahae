@@ -97,7 +97,6 @@ struct Constants {
             static let noticeTextColor: UIColor = UIColor(displayP3Red: (163/255), green: (163/255), blue: (181/255), alpha: 1)
             static let noticeTopMargin: CGFloat = 68
             static let noticeSideMargin: CGFloat = 24
-            static let noticeWidth: CGFloat = 327
             static let noticeHeight: CGFloat = 96
             static let noticeInset: CGFloat = 20
             

@@ -190,7 +190,6 @@ class DetailViewController: ViewController<DetailBindable> {
         noticeView.snp.makeConstraints {
             $0.top.equalTo(descriptionLabel.snp.bottom).offset(UI.noticeTopMargin)
             $0.leading.trailing.equalTo(view).inset(UI.noticeSideMargin)
-            $0.width.equalTo(UI.noticeWidth)
             $0.height.equalTo(UI.noticeHeight)
             $0.bottom.equalToSuperview().inset(UI.buyBtnHeight + UI.buyBtnTopMargin)
         }
