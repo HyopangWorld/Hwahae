@@ -10,7 +10,7 @@ import RxSwift
 import RxCocoa
 
 extension Reactive where Base: UIViewController {
-    func alert() -> Binder<String> {
+    func notify() -> Binder<String> {
         return Binder(base) { base, message in
             let alert = UIAlertController(title: nil, message: message, preferredStyle: UIAlertController.Style.alert)
             let okAction = UIAlertAction(title: "확인".localizedCapitalized, style: .destructive, handler: nil)

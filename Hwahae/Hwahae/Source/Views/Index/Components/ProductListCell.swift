@@ -12,12 +12,12 @@ import KRWordWrapLabel
 
 class ProductListCell: UICollectionViewCell {
     typealias Data = (id: Int, thumbnail_image: String, title: String, price: String)
+    typealias UI = Constants.UI.IndexCell
 
     let productImageView = UIImageView()
     let titleLabel = KRWordWrapLabel()
     let prieceLabel = UILabel()
 
-    typealias UI = Constants.UI.IndexCell
     var id: Int?
 
     override init(frame: CGRect) {

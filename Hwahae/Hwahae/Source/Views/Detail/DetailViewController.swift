@@ -20,6 +20,10 @@ protocol DetailBindable {
 }
 
 class DetailViewController: ViewController<DetailBindable> {
+    private typealias UI = Constants.UI.Detail
+    private typealias TEXT = Constants.Text.Detail
+    private typealias NUM = Constants.Number.Detail
+    
     let scrollView = UIScrollView()
     let fullImageView = UIImageView()
     let closeButton = UIButton()
@@ -29,10 +33,6 @@ class DetailViewController: ViewController<DetailBindable> {
     let descriptionLabel = UILabel()
     let noticeView = UIView()
     let buyButton = UIButton()
-    
-    private typealias UI = Constants.UI.Detail
-    private typealias TEXT = Constants.Text.Detail
-    private typealias NUM = Constants.Number.Detail
     
     var id: Int? = 0
     
@@ -57,7 +57,7 @@ class DetailViewController: ViewController<DetailBindable> {
             .disposed(by: disposeBag)
         
         viewModel.errorMessage
-            .emit(to: self.rx.alert())
+            .emit(to: self.rx.notify())
             .disposed(by: disposeBag)
         
         viewModel.productDetailData.asObservable()

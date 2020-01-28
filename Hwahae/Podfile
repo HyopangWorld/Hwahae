@@ -14,7 +14,7 @@ target 'Hwahae' do
   pod 'RxDataSources'
   pod 'RxSwiftExt', '~> 5'
 
-  # UI (Autolayout, Image, Animation, Label)
+  # UI (Autolayout, Image, Label)
   pod 'SnapKit', '~> 5.0.1'
   pod 'Kingfisher', '~> 5.11.0'
   pod 'KRWordWrapLabel', '~> 2.1.1'

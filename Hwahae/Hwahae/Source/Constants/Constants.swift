@@ -124,8 +124,8 @@ struct Constants {
         }
         
         struct Detail {
-            static let notice = "부랑구마켓은 통신판매중개자이며 통신판매의 당사자가 아닙니다. 따라서 부랑구마켓은 상품 거래정보 및 거래에 대하여 책임을 지지 않습니다."
-            static let buyBtnTitle = "구매하기"
+            static let notice = "부랑구마켓은 통신판매중개자이며 통신판매의 당사자가 아닙니다. 따라서 부랑구마켓은 상품 거래정보 및 거래에 대하여 책임을 지지 않습니다.".localizedCapitalized
+            static let buyBtnTitle = "구매하기".localizedCapitalized
         }
     }
     

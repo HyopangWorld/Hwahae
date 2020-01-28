@@ -24,15 +24,16 @@ protocol IndexViewBindable {
 }
 
 class IndexViewController: ViewController<IndexViewBindable> {
+    private typealias UI = Constants.UI.Index
+    private typealias TEXT = Constants.Text.Index
+    private typealias NUM = Constants.Number.Index
+    
     let searchController = UISearchController(searchResultsController: nil)
     let collectionLayout = UICollectionViewFlowLayout()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     let fetchIndicator = Indicator(image: UIImage(named: "outline_explore_black.png"))
     let header = ProductListHeader()
     
-    private typealias UI = Constants.UI.Index
-    private typealias TEXT = Constants.Text.Index
-    private typealias NUM = Constants.Number.Index
     private var page = 1
     
     override func bind(_ viewModel: IndexViewBindable) {
@@ -100,7 +101,7 @@ class IndexViewController: ViewController<IndexViewBindable> {
             .disposed(by: disposeBag)
         
         viewModel.errorMessage
-            .emit(to: self.rx.alert())
+            .emit(to: self.rx.notify())
             .disposed(by: disposeBag)
 
         viewModel.viewWillSearch.asObservable()
@@ -145,14 +146,14 @@ class IndexViewController: ViewController<IndexViewBindable> {
         let collectionFetch = collectionView.rx.contentOffset
             .skipUntil(viewModel.reloadList.asObservable())
             .filter { [weak self] offset -> Bool in
-                let height = (self?.collectionView.collectionViewLayout.collectionViewContentSize.height ?? 0) - (self?.collectionView.frame.height ?? 0) + Constants.UI.Base.safeAreaInsetsTop // edge가 없으면 0으로 값을 잡는다.
+                let height = (self?.collectionView.collectionViewLayout.collectionViewContentSize.height ?? 0) - (self?.collectionView.frame.height ?? 0) + Constants.UI.Base.safeAreaInsetsTop
                 return Int(offset.y - height) == 0
             }
-            .map { Int($0.y) }
+            .map { [Int($0.y)] }
         
         let collectionReload = viewModel.viewWillReload.asObservable().map { _ -> [Int] in return [] }
         
-        Observable.merge(collectionReload, collectionFetch.map{ [$0] })
+        Observable.merge(collectionReload, collectionFetch)
             .skipUntil(searchController.searchBar.rx.cancelButtonClicked.startWith(Void()))
             .withLatestFrom(collectionView.rx.willDisplayCell) { ($0, $1.at) }
             .filter{ [weak self] (val, at) in
