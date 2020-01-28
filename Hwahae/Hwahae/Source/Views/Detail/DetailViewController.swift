@@ -147,8 +147,8 @@ class DetailViewController: ViewController<DetailBindable> {
         scrollView.addSubview(descriptionLabel)
         scrollView.addSubview(noticeView)
         view.addSubview(scrollView)
-        view.addSubview(closeButton)
         view.addSubview(buyButton)
+        view.addSubview(closeButton)
         
         scrollView.snp.makeConstraints {
             $0.top.equalToSuperview().inset(UI.scrollTopMargin)
@@ -156,41 +156,40 @@ class DetailViewController: ViewController<DetailBindable> {
         }
         
         fullImageView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
+            $0.top.equalToSuperview()
             $0.height.equalTo(view.frame.width)
+            $0.trailing.leading.equalTo(view)
         }
         
         closeButton.snp.makeConstraints {
-            $0.top.equalTo(scrollView.snp.top).inset(UI.closeBtnMargin)
-            $0.trailing.equalToSuperview().inset(UI.closeBtnMargin)
+            $0.top.trailing.equalTo(scrollView).inset(UI.closeBtnMargin)
             $0.width.height.equalTo(UI.closeBtnHeight)
         }
         
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(fullImageView.snp.bottom).offset(UI.titleTopMargin)
-            $0.leading.trailing.equalToSuperview().inset(UI.titleSideMargin)
+            $0.trailing.leading.equalTo(view).inset(UI.titleSideMargin)
         }
         
         priceLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(UI.priceTopMargin)
-            $0.leading.trailing.equalToSuperview().offset(UI.priceSideMargin)
+            $0.leading.trailing.equalTo(view).offset(UI.priceSideMargin)
         }
         
         line.snp.makeConstraints {
             $0.top.equalTo(priceLabel.snp.bottom).offset(UI.lineTopMargin)
-            $0.leading.trailing.equalToSuperview().inset(UI.lineSideMargin)
+            $0.leading.trailing.equalTo(view).inset(UI.lineSideMargin)
             $0.height.equalTo(UI.lineHeight)
         }
         
         descriptionLabel.snp.makeConstraints {
             $0.top.equalTo(line.snp.bottom).offset(UI.descriptiocnTopMargin)
-            $0.leading.trailing.equalToSuperview().inset(UI.descriptionSideMargin)
+            $0.leading.trailing.equalTo(view).inset(UI.descriptionSideMargin)
         }
         
         noticeView.snp.makeConstraints {
             $0.top.equalTo(descriptionLabel.snp.bottom).offset(UI.noticeTopMargin)
-            $0.leading.trailing.equalToSuperview().inset(UI.noticeSideMargin)
-            $0.centerX.equalToSuperview()
+            $0.leading.trailing.equalTo(view).inset(UI.noticeSideMargin)
             $0.width.equalTo(UI.noticeWidth)
             $0.height.equalTo(UI.noticeHeight)
             $0.bottom.equalToSuperview().inset(UI.buyBtnHeight + UI.buyBtnTopMargin)
