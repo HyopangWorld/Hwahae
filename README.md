@@ -1,34 +1,8 @@
 # Hwahae
 
 [Market 프로젝트](https://github.com/HyopangWorld/Market)에서 + 추가 기능, 코드리뷰 받은 부분 발전한 프로젝트 입니다!
+<br>
 ~~개인 캘린더에 일정을 잘못 등록해서 제출을 놓친건 안비밀...😭~~
-
-1. 상품 목록 및 상세 화면
-
-<img src="./Contents/pullToReload.gif" width="35%" height="35%" style="float:left"/>
-
-<br>
-
-2. 피부 타입별 상품 목록 화면
-
-<img src="./Contents/search.gif" width="35%" height="35%" style="float:left"/>
-
-<br>
-
-3. 상품 검색 화면
-
-<img src="./Contents/skinType.gif" width="35%" height="35%" style="float:left"/>
-
-<br>
-
-###  Feature
-1. 상품 목록 정보
-2. 상품 목록 Pull-to-Refresh
-3. 피부 타입별 목록 정보 (추가)
-4. 상품 검색 (추가)
-5. 상품 상세 정보
-6. 버튼 Animation
-
 <br>
 
 ### ✨ 리뷰 후 개선점✨
@@ -48,6 +22,34 @@
     - view 컴포넌트 화 (indicator, header  분리 등등)
 8. 지원 버전 낮춰 호환성 높이기
     - 기존 13.2 -> 12.0 변경
+
+<br>
+
+###  Feature
+1. 상품 목록 정보
+2. 상품 목록 Pull-to-Refresh
+3. 피부 타입별 목록 정보 (추가)
+4. 상품 검색 (추가)
+5. 상품 상세 정보
+6. 버튼 Animation
+
+<br>
+
+1. 상품 목록 및 상세 화면
+
+<img src="./Contents/pullToReload.gif" width="35%" height="35%" style="float:left"/>
+
+<br>
+
+2. 피부 타입별 상품 목록 화면
+
+<img src="./Contents/skinType.gif" width="35%" height="35%" style="float:left"/>
+
+<br>
+
+3. 상품 검색 화면
+
+<img src="./Contents/search.gif" width="35%" height="35%" style="float:left"/>
 
 <br>
 
