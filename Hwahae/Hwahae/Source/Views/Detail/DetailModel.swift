@@ -19,11 +19,11 @@ struct DetailModel {
         return productsNetwork.getProduct(id: id)
     }
     
-    func parseData(val: Product) -> DetailData? {
-        return (id: val.id ?? 0,
-                full_size_image: val.full_size_image ?? "",
-                title: val.title ?? "",
-                description: val.description ?? "",
-                price: val.price?.makeNumberToMoney() ?? "")
+    func parseData(value: Product) -> DetailData? {
+        return (id: value.id ?? 0,
+                full_size_image: value.full_size_image ?? "",
+                title: value.title ?? "",
+                description: value.description ?? "",
+                price: value.price?.makeNumberToMoney() ?? "")
     }
 }

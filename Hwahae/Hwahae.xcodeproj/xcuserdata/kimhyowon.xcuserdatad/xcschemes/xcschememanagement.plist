@@ -4,10 +4,33 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>Hwahae.xcscheme_^#shared#^_</key>
+		<key>Copy of Hwahae.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>16</integer>
+		</dict>
+		<key>Hwahae.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>17</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>DD6C808A23C2C29C004AD177</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DD6C80A023C2C29E004AD177</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DD6C80AB23C2C29E004AD177</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>
